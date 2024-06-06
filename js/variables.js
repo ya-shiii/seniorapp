@@ -1,0 +1,1 @@
+var api_url = "http://" + domain + "/" + base_dir + "/" + api_dir;

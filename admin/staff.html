@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Senior Citizen Information System</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/seniorstyle.css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">
+      <img src="img/senior.png" alt="logo" style="width:50px;"> SCMS
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="senior.html">Senior Citizen</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="announcement.html">Announcement</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="staff.html">Staff</a>
+        </li>
+        <li class="nav-item">
+          <a href="../index.html" class="btn btn-danger h-full">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <br>
+
+  <div class="container">
+    <h3 class="text">Manage Staffs</h3>
+
+    <input id="search" class="form-control col-lg-3 col-md-4" type="text" placeholder="Search..">
+    <br />
+    <div class="d-flex justify-content-between mb-3">
+      <button class="btn btn-success" data-toggle="modal" data-target="#addModal">Add New Staffs</button>
+    </div>
+
+    <br />
+
+    <div class="table-responsive">
+      <table id="display" class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>Staff ID</th>
+            <th>Full Name</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>User Type</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit Staff Account</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="editForm">
+            <div class="form-group">
+              <label for="fullname">Full Name</label>
+              <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full Name">
+            </div>
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" class="form-control" id="username" name="username" placeholder="User Name">
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+            </div>
+            <div class="form-group">
+              <label for="usertype">User Type:</label>
+              <select class="form-control col-lg-12 col-md-12" id="usertype" name="usertype" placeholder="User Type">
+                <option value="">Select User Type</option>
+                <option value="admin">Admin</option>
+                <option value="staff">Staff</option>
+                <option value="senior">Senior</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="save" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- View Modal -->
+  <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewModalLabel">View Account</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Staff ID:</strong> <span id="viewstaffid"></span></p>
+          <p><strong>Full Name:</strong> <span id="viewfullname"></span></p>
+          <p><strong>Username:</strong> <span id="viewusername"></span></p>
+          <p><strong>Password:</strong> <span id="viewpassword"></span></p>
+          <p><strong>User Type:</strong> <span id="viewusertype"></span></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addModalLabel">Add Account</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="addForm">
+            <div class="form-group">
+              <label for="fullname">Full Name:</label>
+              <input type="text" class="form-control" id="addfullname" name="fullname" placeholder="Full Name">
+            </div>
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" class="form-control" id="addusername" name="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="text" class="form-control" id="addpassword" name="password" placeholder="Password">
+            </div>
+            <div class="form-group">
+              <label for="usertype">User Type:</label>
+              <select class="form-control col-lg-12 col-md-12" id="addusertype" name="usertype" placeholder="usertype"
+                required>
+                <option value="">Select User Type</option>
+                <option value="staff">Staff</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="addSave" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="wait"
+    style="display:none;width:69px;height:89px;border:1px solid black;position:absolute;top:50%;left:50%;padding:2px;">
+    <img src='img/demo_wait.gif' width="64" height="64" /><br>Loading..
+  </div>
+
+  <script src="js/sweetalert2@11.js"></script>
+  <script>$(function () {
+      var staffid;
+
+      $(document).ajaxStart(function () {
+        $("#wait").css("display", "block");
+      });
+      $(document).ajaxComplete(function () {
+        $("#wait").css("display", "none");
+      });
+
+      function fetchstaffs() {
+        fetch('../REST/fetch-staff', {
+          method: 'GET'
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            const displayTableBody = document.querySelector('#display tbody');
+            displayTableBody.innerHTML = '';
+            if (data.length === 0 || (data.length === 1 && data[0].msg === "No Information found!")) {
+              displayTableBody.innerHTML = '<tr><td colspan="6">No information found</td></tr>';
+            } else {
+              data.forEach(staff => {
+                const row = `<tr class='data'>
+                             <td>${staff.staffid}</td>
+                             <td>${staff.fullname}</td>
+                             <td>${staff.username}</td>
+                             <td>${staff.password}</td>
+                             <td>${staff.usertype}</td>
+                             <td>
+                              <button class='btn btn-info btnView'>View</button>
+                                 <button class='btn btn-warning btnEdit'>Edit</button>
+                                 <button onclick="deletestaff('${staff.staffid}')" class='btn btn-danger'>Delete</button>
+                             </td>
+                         </tr>`;
+                displayTableBody.innerHTML += row;
+              });
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+            const displayTableBody = document.querySelector('#display tbody');
+            displayTableBody.innerHTML = '<tr><td colspan="6">No information found</td></tr>';
+          });
+      }
+
+      fetchstaffs();
+
+      $("#search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#display .data").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+      });
+
+      $('#display').on('click', '.btnEdit', function () {
+        var currentRow = $(this).closest("tr");
+        staffid = currentRow.find("td:eq(0)").text(); // Store the id
+        var fullname = currentRow.find("td:eq(1)").text();
+        var username = currentRow.find("td:eq(2)").text();
+        var password = currentRow.find("td:eq(3)").text();
+        var usertype = currentRow.find("td:eq(4)").text();
+
+        $('#staffid').val(staffid); // Ensure this field exists in the form
+        $('#fullname').val(fullname); // Ensure this field exists in the form
+        $('#username').val(username);
+        $('#password').val(password);
+        $('#usertype').val(usertype);
+
+        $('#editModal').modal('show');
+      });
+
+      $('#save').click(function () {
+        var fullname = $('#fullname').val();
+        var username = $('#username').val();
+        var password = $('#password').val();
+        var usertype = $('#usertype').val();
+
+        var requestData = {
+          staffid: staffid, // Send the id
+          fullname: fullname,
+          username: username,
+          password: password,
+          usertype: usertype,
+        };
+
+        $.ajax({
+          method: "PUT",
+          url: "../REST/edit-staff",
+          data: JSON.stringify(requestData),
+          contentType: "application/json",
+          success: function (result) {
+            Swal.fire({
+              title: "Edit staff",
+              text: result.msg,
+              icon: "success"
+            }).then(() => {
+              $('#editModal').modal('hide');
+              fetchstaffs();
+            });
+          },
+          error: function (result, jqXHR, textStatus, errorThrown) {
+            console.error('Error editing information');
+            Swal.fire({
+              title: "Edit staff",
+              text: "Failed to edit staff information",
+              icon: "error"
+            });
+          }
+        });
+      });
+
+      $('#addSave').click(function () {
+        var fullname = $('#addfullname').val();
+        var username = $('#addusername').val();
+        var password = $('#addpassword').val();
+        var usertype = $('#addusertype').val();
+
+        var data = JSON.stringify({
+          fullname: fullname,
+          username: username,
+          password: password,
+          usertype: usertype
+        });
+
+        $.ajax({
+          method: "PUT",
+          url: "../REST/add-staff",
+          data: data,
+          contentType: 'application/json',
+          success: function (result) {
+            try {
+              console.log(result);
+              var parsedResult = JSON.parse(result);
+
+              if (parsedResult.status === 'success') {
+                Swal.fire({
+                  title: "Add staff",
+                  text: parsedResult.message,
+                  icon: "success"
+                }).then(() => {
+                  $('#addModal').modal('hide');
+                  fetchstaffs();
+                });
+              } else {
+                Swal.fire({
+                  title: "Add staff",
+                  text: parsedResult.message,
+                  icon: "error"
+                });
+              }
+            } catch (e) {
+              console.error('Parsing error:', e);
+              Swal.fire({
+                title: "Add staff",
+                text: "Failed to parse server response.",
+                icon: "error"
+              });
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Error adding information');
+            Swal.fire({
+              title: "Add staff",
+              text: "Failed to add staff",
+              icon: "error"
+            });
+          }
+        });
+      });
+
+      $('#display').on('click', '.btnView', function () {
+        var currentRow = $(this).closest("tr");
+        var staffid = currentRow.find("td:eq(0)").text();
+        var fullname = currentRow.find("td:eq(1)").text();
+        var username = currentRow.find("td:eq(2)").text();
+        var password = currentRow.find("td:eq(3)").text();
+        var usertype = currentRow.find("td:eq(4)").text();
+
+        $('#viewstaffid').text(staffid);
+        $('#viewfullname').text(fullname);
+        $('#viewusername').text(username);
+        $('#viewpassword').text(password);
+        $('#viewusertype').text(usertype);
+
+        $('#viewModal').modal('show');
+      });
+
+
+      window.deletestaff = function (staffid) {
+        console.log('Deleting staff with ID:', staffid);
+        $.ajax({
+          url: '../REST/delete-staff',
+          method: 'DELETE',
+          contentType: 'application/json',
+          data: JSON.stringify({ staffid: staffid }),
+          success: function (result) {
+            console.log('Delete request successful:', result);
+            Swal.fire({
+              title: "Delete staff",
+              text: result.msg,
+              icon: "success"
+            }).then(() => {
+              fetchstaffs();
+            });
+          },
+          error: function (result, jqXHR, textStatus, errorThrown) {
+            console.error('Error deleting staff');
+            Swal.fire({
+              title: "Delete staff",
+              text: "Failed to delete staff",
+              icon: "error"
+            });
+          }
+        });
+      };
+    });
+  </script>
+
+
+
+</body>
+
+</html>

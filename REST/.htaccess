@@ -1,0 +1,6 @@
+RewriteEngine On
+
+# General rule for other URLs
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^\.]+)$ $1.php [L,QSA]

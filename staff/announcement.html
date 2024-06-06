@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Senior Citizen Information System</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/announcementstyle.css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">
+      <img src="img/senior.png" alt="logo" style="width:50px;"> SCMS
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="senior.html">Senior Citizen</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="announcement.html">Announcement</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="account.html">Account Management</a>
+        </li>
+        <li class="nav-item">
+          <a href="../index.html" class="btn btn-danger h-full">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <br>
+
+  <div class="container">
+    <h3 class="text">Manage Announcement</h3>
+
+    <input id="search" class="form-control col-lg-3 col-md-4" type="text" placeholder="Search..">
+    <br />
+    <div class="d-flex justify-content-between mb-3">
+      <button class="btn btn-success" data-toggle="modal" data-target="#addModal">Add New Announcement</button>
+    </div>
+
+    <br />
+
+    <div class="table-responsive">
+      <table id="display" class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>Announcement ID</th>
+            <th>Barangay</th>
+            <th>Announcement Title</th>
+            <th>Announcement Description</th>
+            <th>Creation Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</body>
+
+</html>
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="Barangay">Barangay:</label>
+            <select style="text-transform: uppercase" class="form-control col-lg-12 col-md-12" id="Barangay"
+              name="Barangay" placeholder="Barangay">
+              <option value="">Choose Barangay</option>
+              <option value="Aguada">Aguada</option>
+              <option value="Bacolod">Bacolod</option>
+              <option value="Bagakay">Bagakay</option>
+              <option value="Balintawak">Balintawak</option>
+              <option value="Banadero">Banadero</option>
+              <option value="Baybay San Roque">Baybay San Roque</option>
+              <option value="Baybay Santa Cruz">Baybay Santa Cruz</option>
+              <option value="Baybay Triunfo">Baybay Triunfo</option>
+              <option value="Bongbong">Bongbong</option>
+              <option value="Calabayan">Calabayan</option>
+              <option value="Capucao C">Capucao C</option>
+              <option value="Capucao P">Capucao P</option>
+              <option value="Carangan">Carangan</option>
+              <option value="Carmen Annex">Carmen Annex</option>
+              <option value="Catadman-Manabay">Catadman-Manabay</option>
+              <option value="Cavinte">Cavinte</option>
+              <option value="Cogon">Cogon</option>
+              <option value="Dalapang">Dalapang</option>
+              <option value="Diguan">Diguan</option>
+              <option value="Dimaluna">Dimaluna</option>
+              <option value="Doña Consuelo">Doña Consuelo</option>
+              <option value="Embargo">Embargo</option>
+              <option value="Gala">Gala</option>
+              <option value="Gango">Gango</option>
+              <option value="Gotokan Daku">Gotokan Daku</option>
+              <option value="Gotokan Diot">Gotokan Diot</option>
+              <option value="Guimad">Guimad</option>
+              <option value="Guingona">Guingona</option>
+              <option value="Kinuman Norte">Kinuman Norte</option>
+              <option value="Kinuman Sur">Kinuman Sur</option>
+              <option value="Labinay">Labinay</option>
+              <option value="Labo">Labo</option>
+              <option value="Lam-an">Lam-an</option>
+              <option value="Liposong">Liposong</option>
+              <option value="Litapan">Litapan</option>
+              <option value="Malaubang">Malaubang</option>
+              <option value="Manaka">Manaka</option>
+              <option value="Maningcol">Maningcol</option>
+              <option value="Mentering">Mentering</option>
+              <option value="Molicay">Molicay</option>
+              <option value="Pantaon">Pantaon</option>
+              <option value="Pulot">Pulot</option>
+              <option value="San Antonio">San Antonio</option>
+              <option value="Sangay Daku">Sangay Daku</option>
+              <option value="Sangay Diot">Sangay Diot</option>
+              <option value="Sinuza">Sinuza</option>
+              <option value="Stimson Abordo">Stimson Abordo</option>
+              <option value="Tabid">Tabid</option>
+              <option value="Tinago">Tinago</option>
+              <option value="Trigos">Trigos</option>
+              <option value="50th District">50th District</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="Announcement_title">Announcement Title:</label>
+            <input type="text" class="form-control" id="Announcement_title" name="Announcement_title"
+              placeholder="Announcement Title">
+          </div>
+          <div class="form-group">
+            <label for="Announcement_description">Announcement Description:</label>
+            <input type="text" class="form-control" id="Announcement_description" name="Announcement_description"
+              placeholder="Announcement Description">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="save" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View Modal -->
+<div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewModalLabel">View Account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Announcement ID:</strong> <span id="viewAnnouncementID"></span></p>
+        <p><strong>Barangay:</strong> <span id="viewBarangay"></span></p>
+        <p><strong>Announcement Title:</strong> <span id="viewAnnouncement_title"></span></p>
+        <p><strong>Announcement Description:</strong> <span id="viewAnnouncement_description"></span></p>
+        <p><strong>Creation Date:</strong> <span id="viewCreation_date"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addModalLabel">Add Account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="addForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="Barangay">Barangay:</label>
+            <select class="form-control" id="addBarangay" name="Barangay" placeholder="Barangay">
+              <option value="">Choose Barangay</option>
+              <option value="Aguada">Aguada</option>
+              <option value="Bacolod">Bacolod</option>
+              <option value="Bagakay">Bagakay</option>
+              <option value="Balintawak">Balintawak</option>
+              <option value="Banadero">Banadero</option>
+              <option value="Baybay San Roque">Baybay San Roque</option>
+              <option value="Baybay Santa Cruz">Baybay Santa Cruz</option>
+              <option value="Baybay Triunfo">Baybay Triunfo</option>
+              <option value="Bongbong">Bongbong</option>
+              <option value="Calabayan">Calabayan</option>
+              <option value="Capucao C">Capucao C</option>
+              <option value="Capucao P">Capucao P</option>
+              <option value="Carangan">Carangan</option>
+              <option value="Carmen Annex">Carmen Annex</option>
+              <option value="Catadman-Manabay">Catadman-Manabay</option>
+              <option value="Cavinte">Cavinte</option>
+              <option value="Cogon">Cogon</option>
+              <option value="Dalapang">Dalapang</option>
+              <option value="Diguan">Diguan</option>
+              <option value="Dimaluna">Dimaluna</option>
+              <option value="Doña Consuelo">Doña Consuelo</option>
+              <option value="Embargo">Embargo</option>
+              <option value="Gala">Gala</option>
+              <option value="Gango">Gango</option>
+              <option value="Gotokan Daku">Gotokan Daku</option>
+              <option value="Gotokan Diot">Gotokan Diot</option>
+              <option value="Guimad">Guimad</option>
+              <option value="Guingona">Guingona</option>
+              <option value="Kinuman Norte">Kinuman Norte</option>
+              <option value="Kinuman Sur">Kinuman Sur</option>
+              <option value="Labinay">Labinay</option>
+              <option value="Labo">Labo</option>
+              <option value="Lam-an">Lam-an</option>
+              <option value="Liposong">Liposong</option>
+              <option value="Litapan">Litapan</option>
+              <option value="Malaubang">Malaubang</option>
+              <option value="Manaka">Manaka</option>
+              <option value="Maningcol">Maningcol</option>
+              <option value="Mentering">Mentering</option>
+              <option value="Molicay">Molicay</option>
+              <option value="Pantaon">Pantaon</option>
+              <option value="Pulot">Pulot</option>
+              <option value="San Antonio">San Antonio</option>
+              <option value="Sangay Daku">Sangay Daku</option>
+              <option value="Sangay Diot">Sangay Diot</option>
+              <option value="Sinuza">Sinuza</option>
+              <option value="Stimson Abordo">Stimson Abordo</option>
+              <option value="Tabid">Tabid</option>
+              <option value="Tinago">Tinago</option>
+              <option value="Trigos">Trigos</option>
+              <option value="50th District">50th District</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="Announcement_title">Announcement Title:</label>
+            <input type="text" class="form-control" id="addAnnouncement_title" name="Announcement_title"
+              placeholder="Announcement Title">
+          </div>
+          <div class="form-group">
+            <label for="Announcement_description">Announcement Description:</label>
+            <input type="text" class="form-control" id="addAnnouncement_description" name="Announcement_description"
+              placeholder="Announcement Description">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="addSave" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="wait"
+  style="display:none;width:69px;height:89px;border:1px solid black;position:absolute;top:50%;left:50%;padding:2px;">
+  <img src='img/demo_wait.gif' width="64" height="64" /><br>Loading..
+</div>
+
+<script src="js/sweetalert2@11.js"></script>
+<script>
+  $(function () {
+    var AnnouncementID;
+
+    $(document).ajaxStart(function () {
+      $("#wait").css("display", "block");
+    });
+    $(document).ajaxComplete(function () {
+      $("#wait").css("display", "none");
+    });
+
+    function fetchannouncements() {
+      fetch('../REST/fetch-announcement', {
+        method: 'GET'
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          const displayTableBody = document.querySelector('#display tbody');
+          displayTableBody.innerHTML = '';
+          if (data.length === 0 || (data.length === 1 && data[0].msg === "No Information found!")) {
+            displayTableBody.innerHTML = '<tr><td colspan="6">No information found</td></tr>';
+          } else {
+            data.forEach(announcement => {
+              const row = `<tr class='data'>
+                        <td>${announcement.AnnouncementID}</td>
+                        <td>${announcement.Barangay}</td>
+                        <td>${announcement.Announcement_title}</td>
+                        <td>${announcement.Announcement_description}</td>
+                        <td>${announcement.Creation_date}</td>
+                        <td>
+                            <button class='w-75 mb-1 btn btn-info btnView'>View</button>
+                            <button class='w-75 mb-1 btn btn-warning btnEdit'>Edit</button>
+                        </td>
+                    </tr>`;
+              displayTableBody.innerHTML += row;
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          const displayTableBody = document.querySelector('#display tbody');
+          displayTableBody.innerHTML = '<tr><td colspan="6">No information found</td></tr>';
+        });
+    }
+
+    fetchannouncements();
+
+    $("#search").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#display .data").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+      });
+    });
+
+    $('#display').on('click', '.btnEdit', function () {
+      var currentRow = $(this).closest("tr");
+      AnnouncementID = currentRow.find("td:eq(0)").text(); // Store the 
+      var Barangay = currentRow.find("td:eq(1)").text();
+      var Announcement_title = currentRow.find("td:eq(2)").text();
+      var Announcement_description = currentRow.find("td:eq(3)").text();
+
+      $('#AnnouncementID').val(AnnouncementID); // Ensure this field exists in the form
+      $('#Barangay').val(Barangay);
+      $('#Announcement_title').val(Announcement_title);
+      $('#Announcement_description').val(Announcement_description);
+
+      $('#editModal').modal('show');
+    });
+
+    $('#save').click(function () {
+      var Barangay = $('#Barangay').val();
+      var Announcement_title = $('#Announcement_title').val();
+      var Announcement_description = $('#Announcement_description').val();
+
+      var requestData = {
+        AnnouncementID: AnnouncementID, // Send the AnnouncementID
+        Barangay: Barangay,
+        Announcement_title: Announcement_title,
+        Announcement_description: Announcement_description,
+      };
+
+      $.ajax({
+        method: "PUT",
+        url: "../REST/edit-announcement",
+        data: JSON.stringify(requestData),
+        contentType: "application/json",
+        success: function (result) {
+          Swal.fire({
+            title: "Edit Announcement",
+            text: result.msg,
+            icon: "success"
+          }).then(() => {
+            $('#editModal').modal('hide');
+            fetchannouncements();
+          });
+        },
+        error: function (result, jqXHR, textStatus, errorThrown) {
+          console.error('Error editing information');
+          Swal.fire({
+            title: "Edit Announcement",
+            text: "Failed to edit announcement information",
+            icon: "error"
+          });
+        }
+      });
+    });
+
+    $('#addSave').click(function () {
+      var Barangay = $('#addBarangay').val();
+      var Announcement_title = $('#addAnnouncement_title').val();
+      var Announcement_description = $('#addAnnouncement_description').val();
+
+      var requestData = {
+        Barangay: Barangay,
+        Announcement_title: Announcement_title,
+        Announcement_description: Announcement_description
+      };
+
+      $.ajax({
+        method: "PUT",
+        url: "../REST/add-announcement",
+        data: JSON.stringify(requestData),
+        contentType: "application/json",
+        success: function (result) {
+          if (typeof result !== 'object') {
+            result = JSON.parse(result);
+          }
+
+          Swal.fire({
+            title: "Add Announcement",
+            text: result.message,
+            icon: result.status === 'success' ? "success" : "error"
+          }).then(() => {
+            if (result.status === 'success') {
+              $('#addModal').modal('hide');
+              fetchannouncements();
+            }
+          });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          console.error('Error adding information:', errorThrown);
+          Swal.fire({
+            title: "Add Announcement",
+            text: "Failed to add announcement",
+            icon: "error"
+          });
+        }
+      });
+    });
+
+    $('#display').on('click', '.btnView', function () {
+      var currentRow = $(this).closest("tr");
+      var AnnouncementID = currentRow.find("td:eq(0)").text();
+      var Barangay = currentRow.find("td:eq(1)").text();
+      var Announcement_title = currentRow.find("td:eq(2)").text();
+      var Announcement_description = currentRow.find("td:eq(3)").text();
+      var Creation_date = currentRow.find("td:eq(4)").text();
+
+      $('#viewAnnouncementID').text(AnnouncementID);
+      $('#viewBarangay').text(Barangay);
+      $('#viewAnnouncement_title').text(Announcement_title);
+      $('#viewAnnouncement_description').text(Announcement_description);
+      $('#viewCreation_date').text(Creation_date);
+
+      $('#viewModal').modal('show');
+    });
+  });
+</script>
+
+
+</body>
+
+</html>

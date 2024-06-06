@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Senior Citizen Information System</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/citizenstyle.css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+  <a class="navbar-brand" href="">
+    <img src="img/senior.png" alt="logo" style="width:50px;"> SCMS
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link active" href="dashboard.html">Dashboard</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="view_announcement.html">Announcement</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="view_record.html">Personal Record</a>
+      </li>
+      <li class="nav-item">
+        <a href="../index.html" class="btn btn-danger h-full">Logout</a>
+      </li>
+    </ul>
+  </div>  
+</nav>
+<br>
+
+<div class="container">
+  <div class="jumbotron text-center">
+    <h1>Welcome to Senior Citizen Management System</h1>
+    <p>Managing senior citizen information efficiently and effectively.</p>
+  </div>
+
+  <div class="card-deck">
+    <div class="card text-white bg-secondary mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Important Announcements</h5>
+        <p class="card-text">Stay updated with the latest announcements from the office.</p>
+        <a href="view_announcement.html" class="btn btn-warning">View Announcement</a>
+      </div>
+    </div>
+    <div class="card text-white bg-info mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Manage Records</h5>
+        <p class="card-text">View, edit, and manage senior citizen records.</p>
+        <a href="view_record.html" class="btn btn-light">Go to Records</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

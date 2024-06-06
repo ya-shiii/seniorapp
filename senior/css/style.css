@@ -1,0 +1,58 @@
+/* Ensure the table wrapper is responsive */
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Ensure the table header and body are correctly aligned when scrolling */
+  .table {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+  }
+  
+  .table thead th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    background: #fff;
+  }
+  
+  /* Adjust table cell images */
+  table img {
+    display: block;
+    max-width: 100px;
+    max-height: 100px;
+    width: auto;
+    height: auto;
+  }
+  
+  /* Make buttons and inputs more accessible on small screens */
+  @media (max-width: 576px) {
+    .btn {
+      margin: 0.25rem 0;
+      width: 100%;
+    }
+  
+    input[type="text"],
+    input[type="file"] {
+      width: 100%;
+    }
+  }
+  
+  /* Custom scroll bar styling for better visibility */
+  .table-responsive::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .table-responsive::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+  
+  .table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  

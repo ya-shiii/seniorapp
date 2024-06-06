@@ -1,0 +1,52 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand img {
+    margin-right: 10px;
+}
+
+
+
+
+.modal-header {
+    background-color: #007bff;
+    color: white;
+}
+
+.modal-footer .btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border: none;
+}
+
+input.form-control,
+select.form-control {
+    margin-bottom: 15px;
+}
+
+.btn-primary,
+.btn-secondary {
+    margin-right: 5px;
+}
+
+.modal-content {
+    border-radius: 10px;
+}
+
+.modal-header,
+.modal-footer {
+    border-radius: 10px;
+}
+

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>View Announcements - Senior Citizen Information System</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/citizenstyle.css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <a class="navbar-brand" href="#">
+      <img src="img/senior.png" alt="logo" style="width:50px;">SCMS
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="view_announcement.html">Announcements</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="view_record.html">Personal Record</a>
+        </li>
+        <li class="nav-item">
+          <a href="../index.html" class="btn btn-danger h-full">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <br>
+
+  <div class="container">
+    <div class="jumbotron text-center">
+      <h1>Senior Information</h1>
+      <p>Details of the Senior Citizen</p>
+    </div>
+
+    <div class="table-responsive">
+      <table id="display" class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>Image</th>
+            <th>Senior ID</th>
+            <th>Full Name</th>
+            <th>Date of Birth</th>
+            <th>Age</th>
+            <th>Contact Number</th>
+            <th>Address</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="details-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit Account</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="seniorcode">Senior Code:</label>
+              <input type="text" class="form-control" id="seniorcode" name="seniorcode" placeholder="Senior Code"
+                readonly>
+            </div>
+            <div class="form-group">
+              <label for="fullname">Full Name:</label>
+              <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Fullname">
+            </div>
+            <!-- HTML for Edit Form -->
+            <div class="form-group">
+              <label for="dob">Date of Birth:</label><br>
+              <input class="form-control" type="date" id="dob" name="dob">
+            </div>
+            <div class="form-group">
+              <label for="age">age:</label><br>
+              <input class="form-control" type="number" id="age" name="age" placeholder="age" readonly>
+            </div>
+            <div class="form-group">
+              <label for="address">address:</label>
+              <input class="form-control col-lg-12 col-md-12" type="text" id="address" name="address"
+                placeholder="address">
+            </div>
+            <div class="form-group">
+              <label for="contactnumber">Contact Number:</label>
+              <input class="form-control col-lg-12 col-md-12" type="tel" id="contactnumber" name="contactnumber"
+                placeholder="Contact Number">
+            </div>
+            <div class="form-group">
+              <label for="username">Username:</label>
+              <input class="form-control col-lg-12 col-md-12" type="text" id="username" name="username"
+                placeholder="username">
+            </div>
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input class="form-control col-lg-12 col-md-12" type="password" id="password" name="password"
+                placeholder="password">
+            </div>
+
+            <div class="form-group">
+              <label for="newImage">Image:</label>
+              <input type="file" class="form-control-file" id="newImage" name="newImage" accept="image/*">
+            </div>
+            <img id="seniorcitizenImage" src="" alt="seniorcitizen Image" class="img-fluid"
+              style="max-width: 200px; max-height: 200px;">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="save" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- View Modal -->
+  <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewModalLabel">View Account</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Senior Code:</strong> <span id="viewseniorcode"></span></p>
+          <p><strong>Full Name:</strong> <span id="viewfullname"></span></p>
+          <p><strong>Date of Birth:</strong> <span id="viewdob"></span></p>
+          <p><strong>age:</strong> <span id="viewage"></span></p>
+          <p><strong>address:</strong> <span id="viewaddress"></span></p>
+          <p><strong>Contact Number:</strong> <span id="viewcontactnumber"></span></p>
+          <p><strong>username:</strong> <span id="viewusername"></span></p>
+          <p><strong>password:</strong> <span id="viewpassword"></span></p>
+          <strong>Image:</strong> </br>
+          <img id="viewImage" src="" alt="seniorcitizen Image" class="img-fluid"
+            style="max-width: 200px; max-height: 200px;">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="wait"
+    style="display:none;width:69px;height:89px;border:1px solid black;position:absolute;top:50%;left:50%;padding:2px;">
+    <img src='img/demo_wait.gif' width="64" height="64" /><br>Loading..
+  </div>
+
+  <script src="js/sweetalert2@11.js"></script>
+  <script>
+    $(document).ajaxStart(function () {
+      $("#wait").css("display", "block");
+    });
+    $(document).ajaxComplete(function () {
+      $("#wait").css("display", "none");
+    });
+
+    function fetchSeniorCitizens() {
+      fetch('../REST/fetch-senior-details', {
+        method: 'GET'
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Data received:', data);  // Log the data to inspect its structure
+
+          const displayTableBody = document.querySelector('#details-body');
+          displayTableBody.innerHTML = '';
+
+          if (data.status === 'success' && data.data) {
+            const seniorCitizen = data.data;
+
+            let actionButtons = `
+        <button class='w-75 mb-1 btn btn-info btnView' data-image="${seniorCitizen.image}">View</button>
+        <button class='w-75 mb-1 btn btn-warning btnEdit' data-image="${seniorCitizen.image}">Edit</button>
+      `;
+
+            if (seniorCitizen.status === 'pending') {
+              actionButtons = `
+          <button class='w-75 mb-1 btn btn-secondary btnPending' data-image="${seniorCitizen.image}">Pending</button>
+        `;
+            }
+
+            const row = `<tr class='data'>
+        <td><img src="${seniorCitizen.image}" class="img-fluid" style="max-width: 100px; max-height: 100px;" alt="Senior Citizen Image"></td>
+        <td>${seniorCitizen.seniorcode}</td>
+        <td>${seniorCitizen.fullname}</td>
+        <td>${seniorCitizen.dob}</td>
+        <td>${seniorCitizen.age}</td>
+        <td>${seniorCitizen.contactnumber}</td>
+        <td>${seniorCitizen.address}</td>
+        <td>${seniorCitizen.username}</td>
+        <td>${seniorCitizen.password}</td>
+        <td>
+          ${actionButtons}
+        </td>
+      </tr>`;
+            displayTableBody.innerHTML += row;
+          } else if (data.status === 'fail' && data.msg === "No Information found!") {
+            displayTableBody.innerHTML = '<tr><td colspan="10">No information found</td></tr>';
+          } else {
+            displayTableBody.innerHTML = '<tr><td colspan="10">Unexpected data format</td></tr>';
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          const displayTableBody = document.querySelector('#details-body');
+          displayTableBody.innerHTML = '<tr><td colspan="10">No information found</td></tr>';
+        });
+    }
+
+    fetchSeniorCitizens();
+
+    $('#display').on('click', '.btnEdit', function () {
+      var currentRow = $(this).closest("tr");
+      var seniorcode = currentRow.find("td:eq(1)").text();
+      var fullname = currentRow.find("td:eq(2)").text();
+      var dob = currentRow.find("td:eq(3)").text();
+      var age = currentRow.find("td:eq(4)").text();
+      var address = currentRow.find("td:eq(5)").text();
+      var contactnumber = currentRow.find("td:eq(6)").text();
+      var username = currentRow.find("td:eq(7)").text();
+      var password = currentRow.find("td:eq(8)").text();
+      var imageSrc = $(this).data("image");
+
+      $('#seniorcode').val(seniorcode);
+      $('#fullname').val(fullname);
+      $('#dob').val(dob);
+      $('#age').val(age);
+      $('#address').val(address);
+      $('#contactnumber').val(contactnumber);
+      $('#username').val(username);
+      $('#password').val(password);
+      $('#seniorcitizenImage').attr("src", imageSrc);
+
+      $('#editModal').modal('show');
+    });
+
+    $('#save').click(function () {
+      var seniorcode = $('#seniorcode').val();
+      var fullname = $('#fullname').val();
+      var dob = $('#dob').val();
+      var age = $('#age').val();
+      var address = $('#address').val();
+      var contactnumber = $('#contactnumber').val();
+      var username = $('#username').val();
+      var password = $('#password').val();
+      var newImage = $('#newImage')[0].files[0];
+
+      // Update senior information
+      var requestData = {
+        seniorcode: seniorcode,
+        fullname: fullname,
+        dob: dob,
+        age: age,
+        address: address,
+        contactnumber: contactnumber,
+        username: username,
+        password: password
+      };
+
+      // AJAX request to update senior information
+      $.ajax({
+        method: "PUT",
+        url: "../REST/edit-senior",
+        data: JSON.stringify(requestData),
+        contentType: "application/json",
+        success: function (result) {
+          console.log("Senior Info Update Result:", result); // Log the result of senior info update
+
+          // Check if a new image is uploaded
+          if (newImage) {
+            // Read the uploaded image
+            var reader = new FileReader();
+            reader.onload = function (event) {
+              var imageData = event.target.result;
+              //console.log("Image Data:", imageData); // For debugging
+
+              // Request data for editing the image
+              var requestDataImage = {
+                username: username,
+                newImage: imageData
+              };
+
+              // AJAX request to edit the image
+              $.ajax({
+                method: "POST",
+                url: "../REST/edit-senior-image",
+                data: JSON.stringify(requestDataImage),
+                contentType: "application/json",
+                success: function (result) {
+                  //console.log("Image Update Result:", result); //For debugging
+                  // Handle success response
+                  if (JSON.parse(result).status === 'success' && JSON.parse(result).message.includes('Senior information updated successfully')) {
+                    // Display success message
+                    Swal.fire({
+                      title: "Edit Account",
+                      text: JSON.parse(result).message,
+                      icon: "success"
+                    }).then(() => {
+                      $('#editModal').modal('hide');
+                      location.reload();
+                    });
+                  } else if (JSON.parse(result).status === 'success' && JSON.parse(result).message.includes('Image uploaded and database updated successfully')) {
+                    // Display success message for image update
+                    Swal.fire({
+                      title: "Edit Account",
+                      text: JSON.parse(result).message,
+                      icon: "success"
+                    }).then(() => {
+                      $('#editModal').modal('hide');
+                      location.reload();
+                    });
+                  } else {
+                    // Display error message
+                    Swal.fire({
+                      title: "Edit Account",
+                      text: JSON.parse(result).message,
+                      icon: "error"
+                    });
+                  }
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  // Handle AJAX error
+                  console.error('Error editing image');
+                  Swal.fire({
+                    title: "Edit Account",
+                    text: "Failed to edit account image",
+                    icon: "error"
+                  });
+                }
+              });
+            };
+            reader.readAsDataURL(newImage); // Read the uploaded image file
+          } else {
+            Swal.fire({
+              title: "Edit Account",
+              text: JSON.parse(result).message,
+              icon: "success"
+            }).then(() => {
+              $('#editModal').modal('hide');
+              location.reload();
+            });
+
+          }
+        },
+        error: function (result, jqXHR, textStatus, errorThrown) {
+          // Handle AJAX error for updating senior information
+          console.error('Error editing information');
+          Swal.fire({
+            title: "Edit Account",
+            text: "Failed to edit account information",
+            icon: "error"
+          });
+        }
+      });
+    });
+
+
+    $('#display').on('click', '.btnView', function () {
+      var currentRow = $(this).closest("tr");
+      var seniorcode = currentRow.find("td:eq(1)").text();
+      var fullname = currentRow.find("td:eq(2)").text();
+      var dob = currentRow.find("td:eq(3)").text();
+      var age = currentRow.find("td:eq(4)").text();
+      var address = currentRow.find("td:eq(5)").text();
+      var contactnumber = currentRow.find("td:eq(6)").text();
+      var username = currentRow.find("td:eq(7)").text();
+      var password = currentRow.find("td:eq(8)").text();
+      var imageSrc = $(this).data("image");
+
+      $('#viewseniorcode').text(seniorcode);
+      $('#viewfullname').text(fullname);
+      $('#viewdob').text(dob);
+      $('#viewage').text(age);
+      $('#viewaddress').text(address);
+      $('#viewcontactnumber').text(contactnumber);
+      $('#viewusername').text(username);
+      $('#viewpassword').text(password);
+
+      $('#viewImage').attr("src", imageSrc);
+
+      $('#viewModal').modal('show');
+    });
+
+  </script>
+
+</body>
+
+</html>

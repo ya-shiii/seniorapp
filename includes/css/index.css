@@ -1,0 +1,19 @@
+/* Custom CSS styles */
+body,
+html {
+    height: 100%;
+    margin: 0;
+    background-color: white;
+    font-family: Arial, sans-serif;
+
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(36, 36, 36);
+    color: rgb(71, 248, 145);
+    text-align: center;
+    padding: 20px 0;
+}

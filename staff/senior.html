@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Senior Citizen Information System</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/seniorstyle.css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">
+      <img src="img/senior.png" alt="logo" style="width:50px;"> SCMS
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="senior.html">Senior Citizen</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="announcement.html">Announcement</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="account.html">Account Management</a>
+        </li>
+        <li class="nav-item">
+          <a href="../index.html" class="btn btn-danger h-full">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <br>
+
+  <div class="container">
+    <h3 class="text">Manage Senior Citizen Record</h3>
+
+    <input id="search" class="form-control col-lg-3 col-md-4" type="text" placeholder="Search..">
+    <br />
+    <div class="d-flex justify-content-between mb-3">
+      <button class="btn btn-success" data-toggle="modal" data-target="#addModal">Add New Senior Citzen Record</button>
+    </div>
+
+    <br />
+
+    <div class="table-responsive">
+      <table id="display" class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>Image</th>
+            <th>Senior Code</th>
+            <th>Full Name</th>
+            <th>Date of Birth</th>
+            <th>age</th>
+            <th>address</th>
+            <th>Contact Number</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit Account</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="seniorcode">Senior Code:</label>
+              <input type="text" class="form-control" id="seniorcode" name="seniorcode" placeholder="Senior Code"
+                readonly>
+            </div>
+            <div class="form-group">
+              <label for="fullname">Full Name:</label>
+              <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Fullname">
+            </div>
+            <!-- HTML for Edit Form -->
+            <div class="form-group">
+              <label for="dob">Date of Birth:</label><br>
+              <input class="form-control" type="date" id="dob" name="dob">
+            </div>
+            <div class="form-group">
+              <label for="age">age:</label><br>
+              <input class="form-control" type="number" id="age" name="age" placeholder="age" readonly>
+            </div>
+            <div class="form-group">
+              <label for="address">address:</label>
+              <input class="form-control col-lg-12 col-md-12" type="text" id="address" name="address"
+                placeholder="address">
+            </div>
+            <div class="form-group">
+              <label for="contactnumber">Contact Number:</label>
+              <input class="form-control col-lg-12 col-md-12" type="tel" id="contactnumber" name="contactnumber"
+                placeholder="Contact Number">
+            </div>
+            <div class="form-group">
+              <label for="username">Username:</label>
+              <input class="form-control col-lg-12 col-md-12" type="text" id="username" name="username"
+                placeholder="username">
+            </div>
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input class="form-control col-lg-12 col-md-12" type="password" id="password" name="password"
+                placeholder="password">
+            </div>
+
+            <div class="form-group">
+              <label for="newImage">Image:</label>
+              <input type="file" class="form-control-file" id="newImage" name="newImage" accept="image/*">
+            </div>
+            <img id="seniorcitizenImage" src="" alt="seniorcitizen Image" class="img-fluid"
+              style="max-width: 200px; max-height: 200px;">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="save" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- View Modal -->
+  <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewModalLabel">View Account</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Senior Code:</strong> <span id="viewseniorcode"></span></p>
+          <p><strong>Full Name:</strong> <span id="viewfullname"></span></p>
+          <p><strong>Date of Birth:</strong> <span id="viewdob"></span></p>
+          <p><strong>age:</strong> <span id="viewage"></span></p>
+          <p><strong>address:</strong> <span id="viewaddress"></span></p>
+          <p><strong>Contact Number:</strong> <span id="viewcontactnumber"></span></p>
+          <p><strong>username:</strong> <span id="viewusername"></span></p>
+          <p><strong>password:</strong> <span id="viewpassword"></span></p>
+          <strong>Image:</strong> </br>
+          <img id="viewImage" src="" alt="seniorcitizen Image" class="img-fluid"
+            style="max-width: 200px; max-height: 200px;">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addModalLabel">Add Account</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="addForm" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="fullname">Full Name:</label>
+              <input type="text" class="form-control" id="addfullname" name="fullname" placeholder="fullname" required>
+            </div>
+            <div class="form-group">
+              <label for="dob">Date of Birth:</label><br>
+              <input class="form-control" type="date" id="adddob" name="dob" required>
+            </div>
+            <div class="form-group">
+              <label for="age">age:</label><br>
+              <input class="form-control" type="number" id="addage" name="age" placeholder="age" min="1" required>
+            </div>
+            <div class="form-group">
+              <label for="address">address:</label>
+              <input type="text" class="form-control" id="addaddress" name="address" placeholder="address" required>
+            </div>
+            <div class="form-group">
+              <label for="contactnumber">Contact Number:</label>
+              <input type="tel" class="form-control" id="addcontactnumber" name="contactnumber"
+                placeholder="Contact Number" required>
+            </div>
+            <div class="form-group">
+              <label for="username">username:</label>
+              <input type="text" class="form-control" id="addusername" name="username" placeholder="username" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input type="text" class="form-control" id="addpassword" name="password" placeholder="password" required>
+            </div>
+            <div class="form-group">
+              <label for="addImage">Image:</label>
+              <input type="file" class="form-control-file" id="addImage" name="image" accept="image/*" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="addSave" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="wait"
+    style="display:none;width:69px;height:89px;border:1px solid black;position:absolute;top:50%;left:50%;padding:2px;">
+    <img src='img/demo_wait.gif' width="64" height="64" /><br>Loading..
+  </div>
+
+  <script src="js/sweetalert2@11.js"></script>
+  <script>
+    $(function () {
+
+      $(document).ajaxStart(function () {
+        $("#wait").css("display", "block");
+      });
+      $(document).ajaxComplete(function () {
+        $("#wait").css("display", "none");
+      });
+
+      function fetchseniorcitizens() {
+        fetch('../REST/fetch-senior-staff', {
+          method: 'GET'
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            const displayTableBody = document.querySelector('#display tbody');
+            displayTableBody.innerHTML = '';
+            if (data.length === 0 || (data.length === 1 && data[0].msg === "No Information found!")) {
+              displayTableBody.innerHTML = '<tr><td colspan="6">No information found</td></tr>';
+            } else {
+              data.forEach(seniorcitizen => {
+                let actionButtons = `
+                    <button class='w-75 mb-1 btn btn-info btnView' data-image="${seniorcitizen.image}">View</button>
+                    <button class='w-75 mb-1 btn btn-warning btnEdit' data-image="${seniorcitizen.image}">Edit</button>
+                `;
+
+                if (seniorcitizen.status === 'pending') {
+                  actionButtons = 'Pending Admin Approval';
+                }
+
+                const row = `<tr class='data'>
+                    <td><img src="${seniorcitizen.image}" class="img-fluid" style="max-width: 100px; max-height: 100px;" alt="seniorcitizen Image"></td>
+                    <td>${seniorcitizen.seniorcode}</td>
+                    <td>${seniorcitizen.fullname}</td>
+                    <td>${seniorcitizen.dob}</td>
+                    <td>${seniorcitizen.age}</td>
+                    <td>${seniorcitizen.address}</td>
+                    <td>${seniorcitizen.contactnumber}</td>
+                    <td>${seniorcitizen.username}</td>
+                    <td>${seniorcitizen.password}</td>
+                    <td>
+                        ${actionButtons}
+                    </td>
+                </tr>`;
+                displayTableBody.innerHTML += row;
+              });
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+            const displayTableBody = document.querySelector('#display tbody');
+            displayTableBody.innerHTML = '<tr><td colspan="6">No information found</td></tr>';
+          });
+      }
+
+      fetchseniorcitizens();
+
+      $("#search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#display .data").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+      });
+
+      $('#display').on('click', '.btnEdit', function () {
+        var currentRow = $(this).closest("tr");
+        var seniorcode = currentRow.find("td:eq(1)").text();
+        var fullname = currentRow.find("td:eq(2)").text();
+        var dob = currentRow.find("td:eq(3)").text();
+        var age = currentRow.find("td:eq(4)").text();
+        var address = currentRow.find("td:eq(5)").text();
+        var contactnumber = currentRow.find("td:eq(6)").text();
+        var username = currentRow.find("td:eq(7)").text();
+        var password = currentRow.find("td:eq(8)").text();
+        var imageSrc = $(this).data("image");
+
+        $('#seniorcode').val(seniorcode);
+        $('#fullname').val(fullname);
+        $('#dob').val(dob);
+        $('#age').val(age);
+        $('#address').val(address);
+        $('#contactnumber').val(contactnumber);
+        $('#username').val(username);
+        $('#password').val(password);
+        $('#seniorcitizenImage').attr("src", imageSrc);
+
+        $('#editModal').modal('show');
+      });
+
+      $('#save').click(function () {
+        var seniorcode = $('#seniorcode').val();
+        var fullname = $('#fullname').val();
+        var dob = $('#dob').val();
+        var age = $('#age').val();
+        var address = $('#address').val();
+        var contactnumber = $('#contactnumber').val();
+        var username = $('#username').val();
+        var password = $('#password').val();
+        var newImage = $('#newImage')[0].files[0];
+
+        // Update senior information
+        var requestData = {
+          seniorcode: seniorcode,
+          fullname: fullname,
+          dob: dob,
+          age: age,
+          address: address,
+          contactnumber: contactnumber,
+          username: username,
+          password: password
+        };
+
+        // AJAX request to update senior information
+        $.ajax({
+          method: "PUT",
+          url: "../REST/edit-senior",
+          data: JSON.stringify(requestData),
+          contentType: "application/json",
+          success: function (result) {
+            console.log("Senior Info Update Result:", result); // Log the result of senior info update
+
+            // Check if a new image is uploaded
+            if (newImage) {
+              // Read the uploaded image
+              var reader = new FileReader();
+              reader.onload = function (event) {
+                var imageData = event.target.result;
+                console.log("Image Data:", imageData); // Log the image data
+
+                // Request data for editing the image
+                var requestDataImage = {
+                  username: username,
+                  newImage: imageData
+                };
+
+                // AJAX request to edit the image
+                $.ajax({
+                  method: "POST",
+                  url: "../REST/edit-senior-image",
+                  data: JSON.stringify(requestDataImage),
+                  contentType: "application/json",
+                  success: function (result) {
+                    console.log("Image Update Result:", result); // Log the result of image update
+                    // Handle success response
+                    if (JSON.parse(result).status === 'success' && JSON.parse(result).message.includes('Senior information updated successfully')) {
+                      // Display success message
+                      Swal.fire({
+                        title: "Edit Account",
+                        text: JSON.parse(result).message,
+                        icon: "success"
+                      }).then(() => {
+                        $('#editModal').modal('hide');
+                        location.reload();
+                      });
+                    } else if (JSON.parse(result).status === 'success' && JSON.parse(result).message.includes('Image uploaded and database updated successfully')) {
+                      // Display success message for image update
+                      Swal.fire({
+                        title: "Edit Account",
+                        text: JSON.parse(result).message,
+                        icon: "success"
+                      }).then(() => {
+                        $('#editModal').modal('hide');
+                        location.reload();
+                      });
+                    } else {
+                      // Display error message
+                      Swal.fire({
+                        title: "Edit Account",
+                        text: JSON.parse(result).message,
+                        icon: "error"
+                      });
+                    }
+
+
+                  },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                    // Handle AJAX error
+                    console.error('Error editing image');
+                    Swal.fire({
+                      title: "Edit Account",
+                      text: "Failed to edit account image",
+                      icon: "error"
+                    });
+                  }
+                });
+              };
+              reader.readAsDataURL(newImage); // Read the uploaded image file
+            } else {
+              Swal.fire({
+                title: "Edit Account",
+                text: JSON.parse(result).message,
+                icon: "success"
+              }).then(() => {
+                $('#editModal').modal('hide');
+                location.reload();
+              });
+
+            }
+          },
+          error: function (result, jqXHR, textStatus, errorThrown) {
+            // Handle AJAX error for updating senior information
+            console.error('Error editing information');
+            Swal.fire({
+              title: "Edit Account",
+              text: "Failed to edit account information",
+              icon: "error"
+            });
+          }
+        });
+      });
+
+      $('#addSave').click(function () {
+        var isValid = true;
+
+        // Check all required fields
+        $('#addForm [required]').each(function () {
+          if ($(this).val() === '') {
+            isValid = false;
+            $(this).addClass('is-invalid');
+          } else {
+            $(this).removeClass('is-invalid');
+          }
+        });
+
+        if (!isValid) {
+          Swal.fire({
+            title: "Form Incomplete",
+            text: "Please fill in all required fields.",
+            icon: "error"
+          });
+          return;
+        }
+
+        var fullname = $('#addfullname').val();
+        var dob = $('#adddob').val();
+        var age = $('#addage').val();
+        var address = $('#addaddress').val();
+        var contactnumber = $('#addcontactnumber').val();
+        var username = $('#addusername').val();
+        var password = $('#addpassword').val();
+        var newImage = $('#addImage')[0].files[0];
+
+        var data = {
+          fullname: fullname,
+          dob: dob,
+          age: age,
+          address: address,
+          contactnumber: contactnumber,
+          username: username,
+          password: password
+        };
+
+        $.ajax({
+          method: "PUT",
+          url: "../REST/add-senior",
+          data: JSON.stringify(data),
+          contentType: 'application/json',
+          success: function (result) {
+            if (newImage) {
+              var formData = new FormData();
+              formData.append('username', username); // Assuming you have a way to identify the senior with username
+              formData.append('image', newImage);
+
+              $.ajax({
+                method: "POST",
+                url: "../REST/upload-senior-image",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (uploadResult) {
+                  Swal.fire({
+                    title: "Add Account",
+                    text: "Senior account and image uploaded successfully",
+                    icon: "success"
+                  }).then(() => {
+                    $('#addModal').modal('hide');
+                    fetchseniorcitizens();
+                  });
+                },
+                error: function (uploadResult, jqXHR, textStatus, errorThrown) {
+                  console.error('Error uploading image');
+                  Swal.fire({
+                    title: "Add Account",
+                    text: "Senior account added, but failed to upload image",
+                    icon: "warning"
+                  }).then(() => {
+                    $('#addModal').modal('hide');
+                    fetchseniorcitizens();
+                  });
+                }
+              });
+            } else {
+              Swal.fire({
+                title: "Add Account",
+                text: result.msg,
+                icon: "success"
+              }).then(() => {
+                $('#addModal').modal('hide');
+                fetchseniorcitizens();
+              });
+            }
+          },
+          error: function (result, jqXHR, textStatus, errorThrown) {
+            console.error('Error adding information');
+            Swal.fire({
+              title: "Add Account",
+              text: "Failed to add account",
+              icon: "error"
+            });
+          }
+        });
+      });
+
+      $('#display').on('click', '.btnView', function () {
+        var currentRow = $(this).closest("tr");
+        var seniorcode = currentRow.find("td:eq(1)").text();
+        var fullname = currentRow.find("td:eq(2)").text();
+        var dob = currentRow.find("td:eq(3)").text();
+        var age = currentRow.find("td:eq(4)").text();
+        var address = currentRow.find("td:eq(5)").text();
+        var contactnumber = currentRow.find("td:eq(6)").text();
+        var username = currentRow.find("td:eq(7)").text();
+        var password = currentRow.find("td:eq(8)").text();
+        var imageSrc = $(this).data("image");
+
+        $('#viewseniorcode').text(seniorcode);
+        $('#viewfullname').text(fullname);
+        $('#viewdob').text(dob);
+        $('#viewage').text(age);
+        $('#viewaddress').text(address);
+        $('#viewcontactnumber').text(contactnumber);
+        $('#viewusername').text(username);
+        $('#viewpassword').text(password);
+
+        $('#viewImage').attr("src", imageSrc);
+
+        $('#viewModal').modal('show');
+      });
+    });
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $('#adddob').change(function () {
+        var dob = $(this).val();
+        var age = calculateage(dob);
+        $('#addage').val(age);
+      });
+
+      // Calculate age on change of dob in edit form
+      $('#dob').change(function () {
+        var dob = $(this).val();
+        var age = calculateage(dob);
+        $('#age').val(age);
+      });
+
+      function calculateage(dob) {
+        var today = new Date();
+        var birthDate = new Date(dob);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        return age;
+      }
+    });
+  </script>
+
+</body>
+
+</html>

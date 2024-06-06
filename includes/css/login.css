@@ -1,0 +1,54 @@
+/* Custom CSS styles */
+body, html {
+    height: 100%;
+    margin: 0;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+.container-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.login-container {
+    background-color: #fff;
+    padding: 40px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.login-container h1 {
+    margin-bottom: 30px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(36, 36, 36);
+    color: rgb(71, 248, 145);
+    text-align: center;
+    padding: 20px 0;
+}
+
+.text-bold {
+    font-weight: 800;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.form-group {
+    text-align: left;
+}

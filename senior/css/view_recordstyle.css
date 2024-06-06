@@ -1,0 +1,29 @@
+body {
+    background-color: #e6f7ff; /* Light pastel blue */
+    font-family: Arial, sans-serif;
+  }
+  
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-brand img {
+    margin-right: 10px;
+  }
+  
+  .jumbotron {
+    background-color: #343a40;
+    color: white;
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+    border-radius: 0.5rem;
+  }
+  
+  /* Body styles */
+  .body {
+    margin-top: 20px; /* add some space from the top */
+  }
+  
+  /* Add more custom styles as needed */
+  

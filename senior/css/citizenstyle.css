@@ -1,0 +1,82 @@
+body {
+  background-color: #e6f7ff; /* Light pastel blue */
+  font-family: Arial, sans-serif;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand img {
+  margin-right: 10px;
+}
+
+.jumbotron {
+  background-color: #343a40;
+  color: white;
+  padding: 2rem 1rem;
+  margin-bottom: 2rem;
+  border-radius: 0.5rem;
+}
+
+.card-deck .card {
+  min-width: 300px;
+}
+
+.card-title {
+  font-size: 1.5rem;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.btn-warning {
+  background-color: #ffcc00; /* Light yellow for better contrast */
+  border: none;
+}
+
+.btn-warning:hover {
+  background-color: #ffdb4d;
+}
+
+.btn-light {
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+}
+
+.btn-light:hover {
+  background-color: #e2e6ea;
+}
+
+.list-group-item {
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.list-group-item.active {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
+}
+
+.list-group-item h5 {
+  font-size: 1.25rem;
+  color: #343a40;
+}
+
+.list-group-item p {
+  color: #6c757d;
+}
+
+.list-group-item small {
+  color: #adb5bd;
+}

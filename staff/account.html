@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Senior Citizen Information System</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboardstyle.css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">
+      <img src="img/senior.png" alt="logo" style="width:50px;"> SCMS
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="senior.html">Senior Citizen</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="announcement.html">Announcement</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="account.html">Account Management</a>
+        </li>
+        <li class="nav-item">
+          <a href="../index.html" class="btn btn-danger h-full">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <br>
+
+
+  <div class="container">
+    <div class="jumbotron">
+      <h3>Staff Account Profile</h3>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">View</h5>
+            <p class="card-text">Open account information</p>
+            <a href="#" class="btn btn-warning" id="viewDetailsBtn">View details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Edit</h5>
+            <p class="card-text">Change account information.</p>
+            <a href="#" id="editDetailsBtn" class="btn btn-warning">Update details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Modal -->
+  <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewModalLabel">View Account</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Staff ID:</strong> <span id="viewstaffid"></span></p>
+          <p><strong>Full Name:</strong> <span id="viewfullname"></span></p>
+          <p><strong>username:</strong> <span id="viewusername"></span></p>
+          <p><strong>password:</strong> <span id="viewpassword"></span></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit Account</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="staffid">Staff ID:</label>
+              <input type="text" class="form-control" id="staffid" name="staffid" placeholder="Staff ID" readonly>
+            </div>
+            <div class="form-group">
+              <label for="fullname">Full Name:</label>
+              <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Fullname" required>
+            </div>
+            <div class="form-group">
+              <label for="username">Username:</label>
+              <input class="form-control col-lg-12 col-md-12" type="text" id="username" name="username"
+                placeholder="username" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input class="form-control col-lg-12 col-md-12" type="password" id="password" name="password"
+                placeholder="password" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="save" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/sweetalert2@11.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#viewDetailsBtn').click(function (e) {
+        e.preventDefault();
+
+        $.ajax({
+          url: '../REST/fetch-staff-details', // Change this URL to your actual endpoint
+          method: 'GET',
+          success: function (response) {
+            console.log('Fetch request successful:', response);
+
+            if (response.status === 'success') {
+              var staff = response.data;
+
+              $('#viewstaffid').text(staff.staffid);
+              $('#viewfullname').text(staff.fullname);
+              $('#viewusername').text(staff.username);
+              $('#viewpassword').text(staff.password);
+
+              // Show the modal
+              $('#viewModal').modal('show');
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: response.msg,
+                icon: "error"
+              });
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Error fetching account details');
+            Swal.fire({
+              title: "Error",
+              text: "Failed to fetch account details",
+              icon: "error"
+            });
+          }
+        });
+      });
+    });
+
+    $(document).ready(function () {
+      $('#editDetailsBtn').click(function (e) {
+        e.preventDefault();
+
+        $.ajax({
+          url: '../REST/fetch-staff-details.php', // Change this URL to your actual endpoint
+          method: 'GET',
+          success: function (response) {
+            console.log('Fetch request successful:', response);
+
+            if (response.status === 'success') {
+              var staff = response.data;
+
+              $('#staffid').val(staff.staffid);
+              $('#fullname').val(staff.fullname);
+              $('#username').val(staff.username);
+              $('#password').val(staff.password);
+
+              // Show the modal
+              $('#editModal').modal('show');
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: response.msg,
+                icon: "error"
+              });
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Error fetching account details');
+            Swal.fire({
+              title: "Error",
+              text: "Failed to fetch account details",
+              icon: "error"
+            });
+          }
+        });
+      });
+
+      $('#save').click(function () {
+        var staffData = {
+          staffid: $('#staffid').val(),
+          fullname: $('#fullname').val(),
+          username: $('#username').val(),
+          password: $('#password').val(),
+          usertype: 'staff' // get usertype from the form
+        };
+
+        $.ajax({
+          url: '../REST/edit-staff.php', // Change this URL to your actual endpoint
+          method: 'PUT',
+          contentType: 'application/json',
+          data: JSON.stringify(staffData),
+          success: function (response) {
+            console.log('Update request successful:', response);
+
+            if (response.status === 'success') {
+              Swal.fire({
+                title: "Success",
+                text: response.msg,
+                icon: "success"
+              }).then(() => {
+                $('#editModal').modal('hide');
+              });
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: response.msg,
+                icon: "error"
+              });
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Error updating account details');
+            Swal.fire({
+              title: "Error",
+              text: "Failed to update account details",
+              icon: "error"
+            });
+          }
+        });
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $('#adddob').change(function () {
+        var dob = $(this).val();
+        var age = calculateage(dob);
+        $('#addage').val(age);
+      });
+
+      // Calculate age on change of dob in edit form
+      $('#dob').change(function () {
+        var dob = $(this).val();
+        var age = calculateage(dob);
+        $('#age').val(age);
+      });
+
+      function calculateage(dob) {
+        var today = new Date();
+        var birthDate = new Date(dob);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        return age;
+      }
+    });
+  </script>
+</body>
+
+</html>
