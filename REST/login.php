@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $_SESSION['username'] = $user['username'];
                     $_SESSION['session_id'] = $user['staffid'];
-                    $_SESSION['usertype'] = 'staff';
+                    $_SESSION['usertype'] = $user['usertype'];;
 
                     $response = array(
                         'status' => 'success',

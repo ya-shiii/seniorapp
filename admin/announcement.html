@@ -37,7 +37,7 @@
           <a class="nav-link" href="staff.html">Staff</a>
         </li>
         <li class="nav-item">
-          <a href="../index.html" class="btn btn-danger h-full">Logout</a>
+          <a href="../REST/logout.php" class="btn btn-danger h-full">Logout</a>
         </li>
       </ul>
     </div>
@@ -280,7 +280,7 @@
 
 
 <div id="wait"
-  style="display:none;width:69px;height:89px;border:1px solid black;position:absolute;top:50%;left:50%;padding:2px;">
+  style="display:none;width:69px;height:89px;position:absolute;top:50%;left:50%;padding:2px;">
   <img src='img/demo_wait.gif' width="64" height="64" /><br>Loading..
 </div>
 
@@ -486,6 +486,51 @@
       });
     };
   });
+
+  function checkUsertype() {
+    $.ajax({
+      url: '../REST/check-usertype',
+      method: 'GET',
+      dataType: 'json',
+      success: function (response) {
+        if (response.usertype === 'admin') {
+          // Usertype is valid, you can add further logic here if needed
+          console.log('Usertype:', response.usertype);
+        } else {
+          // Invalid usertype or status not success
+          Swal.fire({
+            title: "Unauthorized",
+            text: "You are not authorized to view this page. Logging out...",
+            icon: "error",
+            timer: 3000,
+            timerProgressBar: true,
+            didClose: () => {
+              window.location.href = '../REST/logout'; // Redirect to logout
+            }
+          });
+        }
+      },
+      error: function () {
+        // Handle error
+        Swal.fire({
+          title: "Error",
+          text: "Failed to verify user. Logging out...",
+          icon: "error",
+          timer: 3000,
+          timerProgressBar: true,
+          didClose: () => {
+            window.location.href = '../REST/logout'; // Redirect to logout
+          }
+        });
+      }
+    });
+  }
+
+  // Call the function to check usertype on page load
+  $(document).ready(function () {
+    checkUsertype();
+  });
+
 </script>
 
 

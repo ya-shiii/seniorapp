@@ -37,7 +37,7 @@
           <a class="nav-link" href="account.html">Account Management</a>
         </li>
         <li class="nav-item">
-          <a href="../index.html" class="btn btn-danger h-full">Logout</a>
+          <a href="../REST/logout.php" class="btn btn-danger h-full">Logout</a>
         </li>
       </ul>
     </div>
@@ -456,6 +456,50 @@
 
       $('#viewModal').modal('show');
     });
+  });
+
+  function checkUsertype() {
+    $.ajax({
+      url: '../REST/check-usertype',
+      method: 'GET',
+      dataType: 'json',
+      success: function (response) {
+        if (response.usertype === 'staff') {
+          // Usertype is valid, you can add further logic here if needed
+          console.log('Usertype:', response.usertype);
+        } else {
+          // Invalid usertype or status not success
+          Swal.fire({
+            title: "Unauthorized",
+            text: "You are not authorized to view this page. Logging out...",
+            icon: "error",
+            timer: 3000,
+            timerProgressBar: true,
+            didClose: () => {
+              window.location.href = '../REST/logout'; // Redirect to logout
+            }
+          });
+        }
+      },
+      error: function () {
+        // Handle error
+        Swal.fire({
+          title: "Error",
+          text: "Failed to verify user. Logging out...",
+          icon: "error",
+          timer: 3000,
+          timerProgressBar: true,
+          didClose: () => {
+            window.location.href = '../REST/logout'; // Redirect to logout
+          }
+        });
+      }
+    });
+  }
+
+  // Call the function to check usertype on page load
+  $(document).ready(function () {
+    checkUsertype();
   });
 </script>
 
