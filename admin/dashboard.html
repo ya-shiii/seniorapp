@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <title>Senior Citizen Information System</title>
+  <title>SCMS</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -11,8 +10,28 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/sweetalert2@11.js"></script>
+    <style>
+  .card {
+     transition: transform 0.3s;
+   }
+ 
+   .card:hover {
+     transform: scale(1.05);
+   }
+ 
+   .card-title {
+     font-size: 1.5rem;
+   }
+ 
+   .card-body {
+     display: flex;
+     flex-direction: column;
+     justify-content: space-between;
+   }
+ 
+ </style>
 </head>
-
 <body>
 
   <nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -34,6 +53,9 @@
           <a class="nav-link" href="announcement.html">Announcement</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="appointments.html">Appointments</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="staff.html">Staff</a>
         </li>
         <li class="nav-item">
@@ -43,7 +65,6 @@
     </div>
   </nav>
   <br>
-
 
   <div class="container">
     <div class="jumbotron">
@@ -80,9 +101,19 @@
         </div>
       </div>
     </div>
+    
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Birthdays This Month</h5>
+            <ul id="birthday-list" class="list-group"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <script src="js/sweetalert2@11.js"></script>
   <script>
     function checkUsertype() {
       $.ajax({
@@ -123,11 +154,38 @@
       });
     }
 
+    function fetchBirthdays() {
+      $.ajax({
+        url: '../REST/getBirthdays',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+          var birthdayList = $('#birthday-list');
+          birthdayList.empty();
+
+          if (response.error) {
+            birthdayList.append('<li class="list-group-item">' + response.error + '</li>');
+          } else if (response.message) {
+            birthdayList.append('<li class="list-group-item">' + response.message + '</li>');
+          } else {
+            $.each(response, function (index, birthday) {
+              birthdayList.append('<li class="list-group-item">' + birthday.fullname + ' - ' + birthday.dob + '</li>');
+            });
+          }
+        },
+        error: function () {
+          var birthdayList = $('#birthday-list');
+          birthdayList.empty();
+          birthdayList.append('<li class="list-group-item">Error fetching birthdays.</li>');
+        }
+      });
+    }
+
     // Call the function to check usertype on page load
     $(document).ready(function () {
       checkUsertype();
+      fetchBirthdays();
     });
   </script>
 </body>
-
 </html>

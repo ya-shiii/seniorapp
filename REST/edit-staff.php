@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $fullname = $data['fullname'];
     $username = $data['username'];
     $password = $data['password'];
+    $brgy = $data['brgy'];
     $user_type = $data['usertype'];
 
     // Initialize response array
@@ -46,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
         }
     } else {
         // Update tblstaff for other user types
-        $query = "UPDATE tblstaff SET fullname='$fullname', username='$username', password='$password', usertype='$user_type' WHERE staffid='$staffid'";
+        $query = "UPDATE tblstaff SET fullname='$fullname', username='$username', password='$password', usertype='$user_type', brgy='$brgy' WHERE staffid='$staffid'";
         $result = mysqli_query($connection, $query);
 
         // Check if the query was successful

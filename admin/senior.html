@@ -34,6 +34,9 @@
           <a class="nav-link" href="announcement.html">Announcement</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="appointments.html">Appointments</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="staff.html">Staff</a>
         </li>
         <li class="nav-item">
@@ -63,8 +66,8 @@
             <th>Senior Code</th>
             <th>Full Name</th>
             <th>Date of Birth</th>
-            <th>age</th>
-            <th>address</th>
+            <th>Age</th>
+            <th>Address</th>
             <th>Contact Number</th>
             <th>Username</th>
             <th>Password</th>
@@ -104,11 +107,11 @@
               <input class="form-control" type="date" id="dob" name="dob">
             </div>
             <div class="form-group">
-              <label for="age">age:</label><br>
+              <label for="age">Age:</label><br>
               <input class="form-control" type="number" id="age" name="age" placeholder="age" readonly>
             </div>
             <div class="form-group">
-              <label for="address">address:</label>
+              <label for="address">Address:</label>
               <input class="form-control col-lg-12 col-md-12" type="text" id="address" name="address"
                 placeholder="address">
             </div>
@@ -160,11 +163,11 @@
           <p><strong>Senior Code:</strong> <span id="viewseniorcode"></span></p>
           <p><strong>Full Name:</strong> <span id="viewfullname"></span></p>
           <p><strong>Date of Birth:</strong> <span id="viewdob"></span></p>
-          <p><strong>age:</strong> <span id="viewage"></span></p>
-          <p><strong>address:</strong> <span id="viewaddress"></span></p>
+          <p><strong>Age:</strong> <span id="viewage"></span></p>
+          <p><strong>Address:</strong> <span id="viewaddress"></span></p>
           <p><strong>Contact Number:</strong> <span id="viewcontactnumber"></span></p>
-          <p><strong>username:</strong> <span id="viewusername"></span></p>
-          <p><strong>password:</strong> <span id="viewpassword"></span></p>
+          <p><strong>Username:</strong> <span id="viewusername"></span></p>
+          <p><strong>Password:</strong> <span id="viewpassword"></span></p>
           <strong>Image:</strong> </br>
           <img id="viewImage" src="" alt="seniorcitizen Image" class="img-fluid"
             style="max-width: 200px; max-height: 200px;">
@@ -189,19 +192,19 @@
           <form id="addForm" enctype="multipart/form-data">
             <div class="form-group">
               <label for="fullname">Full Name:</label>
-              <input type="text" class="form-control" id="addfullname" name="fullname" placeholder="fullname" required>
+              <input type="text" class="form-control" id="addfullname" name="fullname" placeholder="Fullname" required>
             </div>
             <div class="form-group">
               <label for="dob">Date of Birth:</label><br>
               <input class="form-control" type="date" id="adddob" name="dob" required>
             </div>
             <div class="form-group">
-              <label for="age">age:</label><br>
-              <input class="form-control" type="number" id="addage" name="age" placeholder="age" min="1" required>
+              <label for="age">Age:</label><br>
+              <input class="form-control" type="number" id="addage" name="age" placeholder="Age" min="1" required>
             </div>
             <div class="form-group">
-              <label for="address">address:</label>
-              <input type="text" class="form-control" id="addaddress" name="address" placeholder="address" required>
+              <label for="address">Address:</label>
+              <input type="text" class="form-control" id="addaddress" name="address" placeholder="Address" required>
             </div>
             <div class="form-group">
               <label for="contactnumber">Contact Number:</label>
@@ -209,12 +212,12 @@
                 placeholder="Contact Number" required>
             </div>
             <div class="form-group">
-              <label for="username">username:</label>
-              <input type="text" class="form-control" id="addusername" name="username" placeholder="username" required>
+              <label for="username">Username:</label>
+              <input type="text" class="form-control" id="addusername" name="username" placeholder="Username" required>
             </div>
             <div class="form-group">
               <label for="password">Password:</label>
-              <input type="text" class="form-control" id="addpassword" name="password" placeholder="password" required>
+              <input type="text" class="form-control" id="addpassword" name="password" placeholder="Password" required>
             </div>
             <div class="form-group">
               <label for="addImage">Image:</label>
@@ -278,9 +281,9 @@
                 if (seniorcitizen.status === 'pending') {
                   actionButtons = actionButtons2;
                 }
-
+            
                 const row = `<tr class='data'>
-                    <td><img src="${seniorcitizen.image}" class="img-fluid" style="max-width: 100px; max-height: 100px;" alt="seniorcitizen Image"></td>
+                    <td><img src="${seniorcitizen.image}?${new Date().getTime()}" class="img-fluid" style="max-width: 100px; max-height: 100px;" alt="seniorcitizen Image"></td>
                     <td>${seniorcitizen.seniorcode}</td>
                     <td>${seniorcitizen.fullname}</td>
                     <td>${seniorcitizen.dob}</td>
@@ -323,7 +326,7 @@
         var contactnumber = currentRow.find("td:eq(6)").text();
         var username = currentRow.find("td:eq(7)").text();
         var password = currentRow.find("td:eq(8)").text();
-        var imageSrc = $(this).data("image");
+        var imageSrc = $(this).data("image") + '?' + new Date().getTime();
 
         $('#seniorcode').val(seniorcode);
         $('#fullname').val(fullname);
@@ -572,7 +575,7 @@
         var contactnumber = currentRow.find("td:eq(6)").text();
         var username = currentRow.find("td:eq(7)").text();
         var password = currentRow.find("td:eq(8)").text();
-        var imageSrc = $(this).data("image");
+        var imageSrc = $(this).data("image") + '?' + new Date().getTime();
 
         $('#viewseniorcode').text(seniorcode);
         $('#viewfullname').text(fullname);
@@ -646,32 +649,52 @@
     });
   </script>
 
+
   <script>
-    $(document).ready(function () {
-      $('#adddob').change(function () {
-        var dob = $(this).val();
-        var age = calculateage(dob);
+     $(document).ready(function () {
+    $('#adddob').change(function () {
+      var dob = $(this).val();
+      var age = calculateage(dob);
+      if (age >= 60) {
         $('#addage').val(age);
-      });
-
-      // Calculate age on change of dob in edit form
-      $('#dob').change(function () {
-        var dob = $(this).val();
-        var age = calculateage(dob);
-        $('#age').val(age);
-      });
-
-      function calculateage(dob) {
-        var today = new Date();
-        var birthDate = new Date(dob);
-        var age = today.getFullYear() - birthDate.getFullYear();
-        var monthDiff = today.getMonth() - birthDate.getMonth();
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-          age--;
-        }
-        return age;
+      } else {
+        showError();
+        $('#adddob').val('');
+        $('#addage').val('');
       }
     });
+
+    $('#dob').change(function () {
+      var dob = $(this).val();
+      var age = calculateage(dob);
+      if (age >= 60) {
+        $('#age').val(age);
+      } else {
+        showError();
+        $('#dob').val('');
+        $('#age').val('');
+      }
+    });
+
+    function calculateage(dob) {
+      var today = new Date();
+      var birthDate = new Date(dob);
+      var age = today.getFullYear() - birthDate.getFullYear();
+      var monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
+
+    function showError() {
+      Swal.fire({
+        title: "Error age",
+        text: "Age must be 60 above",
+        icon: "error"
+      });
+    }
+  });
 
     function checkUsertype() {
       $.ajax({

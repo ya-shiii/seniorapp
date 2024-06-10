@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>View Announcements - Senior Citizen Information System</title>
+  <title>SCMS</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -17,7 +17,7 @@
 
   <nav class="navbar navbar-expand-md bg-dark navbar-dark">
     <a class="navbar-brand" href="#">
-      <img src="img/senior.png" alt="logo" style="width:50px;">SCMS
+      <img src="img/senior.png" alt="logo" style="width:50px;"> SCMS
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
       <span class="navbar-toggler-icon"></span>
@@ -29,6 +29,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="view_announcement.html">Announcements</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="appointments.html">Appointments</a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" href="view_record.html">Personal Record</a>
@@ -96,11 +99,11 @@
               <input class="form-control" type="date" id="dob" name="dob">
             </div>
             <div class="form-group">
-              <label for="age">age:</label><br>
+              <label for="age">Age:</label><br>
               <input class="form-control" type="number" id="age" name="age" placeholder="age" readonly>
             </div>
             <div class="form-group">
-              <label for="address">address:</label>
+              <label for="address">Address:</label>
               <input class="form-control col-lg-12 col-md-12" type="text" id="address" name="address"
                 placeholder="address">
             </div>
@@ -152,11 +155,11 @@
           <p><strong>Senior Code:</strong> <span id="viewseniorcode"></span></p>
           <p><strong>Full Name:</strong> <span id="viewfullname"></span></p>
           <p><strong>Date of Birth:</strong> <span id="viewdob"></span></p>
-          <p><strong>age:</strong> <span id="viewage"></span></p>
-          <p><strong>address:</strong> <span id="viewaddress"></span></p>
+          <p><strong>Age:</strong> <span id="viewage"></span></p>
+          <p><strong>Address:</strong> <span id="viewaddress"></span></p>
           <p><strong>Contact Number:</strong> <span id="viewcontactnumber"></span></p>
-          <p><strong>username:</strong> <span id="viewusername"></span></p>
-          <p><strong>password:</strong> <span id="viewpassword"></span></p>
+          <p><strong>Username:</strong> <span id="viewusername"></span></p>
+          <p><strong>Password:</strong> <span id="viewpassword"></span></p>
           <strong>Image:</strong> </br>
           <img id="viewImage" src="" alt="seniorcitizen Image" class="img-fluid"
             style="max-width: 200px; max-height: 200px;">
@@ -213,7 +216,7 @@
             }
 
             const row = `<tr class='data'>
-        <td><img src="${seniorCitizen.image}" class="img-fluid" style="max-width: 100px; max-height: 100px;" alt="Senior Citizen Image"></td>
+        <td><img src="${seniorCitizen.image}?${new Date().getTime()}" class="img-fluid" style="max-width: 100px; max-height: 100px;" alt="Senior Citizen Image"></td>
         <td>${seniorCitizen.seniorcode}</td>
         <td>${seniorCitizen.fullname}</td>
         <td>${seniorCitizen.dob}</td>
@@ -252,7 +255,7 @@
       var contactnumber = currentRow.find("td:eq(6)").text();
       var username = currentRow.find("td:eq(7)").text();
       var password = currentRow.find("td:eq(8)").text();
-      var imageSrc = $(this).data("image");
+      var imageSrc = $(this).data("image") + '?' + new Date().getTime();
 
       $('#seniorcode').val(seniorcode);
       $('#fullname').val(fullname);
@@ -400,7 +403,7 @@
       var contactnumber = currentRow.find("td:eq(6)").text();
       var username = currentRow.find("td:eq(7)").text();
       var password = currentRow.find("td:eq(8)").text();
-      var imageSrc = $(this).data("image");
+      var imageSrc = $(this).data("image") + '?' + new Date().getTime();
 
       $('#viewseniorcode').text(seniorcode);
       $('#viewfullname').text(fullname);
@@ -416,7 +419,51 @@
       $('#viewModal').modal('show');
     });
 
-
+    function calculateAge(dob) {
+      var today = new Date();
+      var birthDate = new Date(dob);
+      var age = today.getFullYear() - birthDate.getFullYear();
+      var monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
+  
+    function showError() {
+      Swal.fire({
+        title: "Error age",
+        text: "Age must be 60 above",
+        icon: "error"
+      });
+    }
+  
+    $(document).ready(function () {
+      $('#editdob').change(function () {
+        var dob = $(this).val();
+        var age = calculateAge(dob);
+        if (age >= 60) {
+          $('#editage').val(age);
+        } else {
+          showError();
+          $('#editdob').val('');
+          $('#editage').val('');
+        }
+      });
+  
+      $('#dob').change(function () {
+        var dob = $(this).val();
+        var age = calculateAge(dob);
+        if (age >= 60) {
+          $('#age').val(age);
+        } else {
+          showError();
+          $('#dob').val('');
+          $('#age').val('');
+        }
+      });
+    });
+    
     function checkUsertype() {
       $.ajax({
         url: '../REST/check-usertype',

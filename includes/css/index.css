@@ -1,11 +1,16 @@
 /* Custom CSS styles */
-body,
-html {
-    height: 100%;
-    margin: 0;
-    background-color: white;
-    font-family: Arial, sans-serif;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  color: #343a40;
+}
 
+.navbar {
+  margin-bottom: 20px;
+}
+
+.navbar-brand img {
+  width: 50px;
 }
 
 .footer {
@@ -17,3 +22,4 @@ html {
     text-align: center;
     padding: 20px 0;
 }
+

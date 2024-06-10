@@ -27,6 +27,7 @@
         body {
             background: #ecf0f3;
         }
+
         .header {
             font-size: 2.5rem; /* Increased font size */
             font-weight: bold; /* Bold font weight */
@@ -37,7 +38,7 @@
 
         .wrapper {
             max-width: 350px;
-            min-height: 500px;
+            min-height: 300px;
             margin: 80px auto;
             padding: 40px 30px 30px 30px;
             background-color: #ecf0f3;
@@ -78,6 +79,7 @@
             letter-spacing: 1.3px;
             padding-left: 10px;
             color: #555;
+            margin-bottom: 20px; /* added margin-bottom */
         }
 
         .wrapper .form-field input {
@@ -137,88 +139,86 @@
     </style>
 </head>
 
-      <!-- Header --></br>
-      <div class="header">Senior Citizen Management System</div>
+<body>
+    <!-- Header --></br>
+    <div class="header">Senior Citizen Management System</div>
+
     <div class="wrapper">
         <div class="text-center name">
-            <span>Sign Up</span>
+            <!-- Label -->
+            <span>Login</span>
         </div>
-        <form class="p-3 mt-3" id="signupForm">
+        <form class="p-3 mt-3" id="loginForm">
             <div class="form-field d-flex align-items-center">
                 <span class="far fa-user"></span>
                 <input type="text" name="uname" id="uname" placeholder="Username" required>
             </div>
             <div class="form-field d-flex align-items-center">
-                <span class="fas fa-envelope"></span>
-                <input type="text" name="fullname" id="fullname" placeholder="Full Name" required>
-            </div>
-            <div class="form-field d-flex align-items-center">
                 <span class="fas fa-key"></span>
                 <input type="password" name="pass" id="pass" placeholder="Password" required>
             </div>
-            <div class="form-field d-flex align-items-center">
-                <span class="fas fa-key"></span>
-                <input type="password" name="confirm_pass" id="confirm_pass" placeholder="Confirm Password" required>
-            </div>
-            <div class="form-field d-flex align-items-center" id="profilePictureContainer" hidden>
-                <img id="profilePicture" src="REST/img/defaultpicture.jpg" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%;" hidden>
-            </div>
-            <button type="submit" class="btn mt-3">Sign Up</button>
+            <button type="submit" class="btn mt-3">Login</button>
         </form>
         <div class="text-center fs-6">
-            <p>Already a member? <a href="login.html" id="signupLink">Login</a></p>
+            <p>Become a member, <a href="signup.html" id="signupLink">Sign up</a></p>
         </div>
     </div>
 
 
     <script>
         $(document).ready(function () {
-            // Signup form
-            $('#signupForm').on('submit', function (e) {
+            // Login form
+            $('#loginForm').on('submit', function (e) {
                 e.preventDefault();
     
                 const username = $('#uname').val();
-                const fullname = $('#fullname').val();
                 const password = $('#pass').val();
-                const confirmPassword = $('#confirm_pass').val();
-    
-                // Simple client-side validation for password match
-                if (password !== confirmPassword) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Password mismatch',
-                        text: 'The passwords do not match. Please try again.'
-                    });
-                    return;
-                }
     
                 $.ajax({
-                    url: 'REST/signup', 
-                    type: 'PUT',
+                    url: 'REST/login',
+                    type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({ username: username, fullname: fullname, password: password }),
+                    data: JSON.stringify({ username: username, password: password }),
     
                     success: function (response) {
+                        console.log(response); // Add logging to the console for debugging
                         if (response.status === 'fail') {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Signup failed',
+                                title: 'Login failed',
                                 text: response.msg
                             });
                         } else {
+                            const uname = response.username;
+                            const utype = response.usertype;
+    
+                            Cookies.set('username', uname, { expires: 1, path: '/' });
+                            Cookies.set('usertype', utype, { expires: 1, path: '/' });
+    
+                            let redirectUrl = '';
+    
+                            if (utype === 'admin') {
+                                redirectUrl = 'admin/dashboard.html';
+                            } else if (utype === 'staff') {
+                                redirectUrl = 'staff/dashboard.html';
+                            } else if (utype === 'user') {
+                                redirectUrl = 'senior/dashboard.html';
+                            }
+    
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Signup successful',
-                                text: response.msg,
+                                title: 'Login successful',
+                                text: 'Welcome ' + response.username,
                                 showConfirmButton: false,
                                 timer: 1500
                             }).then(() => {
-                                // Redirect to login page
-                                window.location.href = 'login.html';
+                                // Redirect to the appropriate page
+                                window.location.href = redirectUrl;
                             });
                         }
                     },
                     error: function (jqXHR) {
+                        console.error('Error:', jqXHR); // Log error to the console
                         Swal.fire({
                             icon: 'error',
                             title: 'An error occurred',
@@ -230,7 +230,7 @@
         });
     </script>
     
-
+  
 </body>
 
 </html>

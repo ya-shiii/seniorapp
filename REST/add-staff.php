@@ -10,6 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $fullname = $data['fullname'];
     $username = $data['username'];
     $password = $data['password'];
+    $addbrgy = $data['brgy'];
     $user_type = $data['usertype'];
 
     // Check for duplicates in tblstaff
@@ -31,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
             echo json_encode(array('status' => 'fail', 'message' => 'Username already exists for senior account.'));
         } else {
             // Insert the staff information into the database
-            $query = "INSERT INTO tblstaff (fullname, username, password, usertype) VALUES ('$fullname', '$username', '$password', '$user_type')";
+            $query = "INSERT INTO tblstaff (fullname, username, password, brgy, usertype) VALUES ('$fullname', '$username', '$password', '$addbrgy', '$user_type')";
             $result = mysqli_query($connection, $query);
 
             // Check if the query was successful

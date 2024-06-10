@@ -31,10 +31,10 @@
           <a class="nav-link" href="senior.html">Senior Citizen</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="announcement.html">Announcement</a>
+          <a class="nav-link" href="announcement.html">Announcement</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="appointments.html">Appointments</a>
+          <a class="nav-link active" href="appointments.html">Appointments</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="staff.html">Staff</a>
@@ -48,12 +48,12 @@
   <br>
 
   <div class="container">
-    <h3 class="text">Manage Announcement</h3>
+    <h3 class="text">Manage Appointments</h3>
 
     <input id="search" class="form-control col-lg-3 col-md-4" type="text" placeholder="Search..">
     <br />
     <div class="d-flex justify-content-between mb-3">
-      <button class="btn btn-success" data-toggle="modal" data-target="#addModal">Add New Announcement</button>
+      <button class="btn btn-success" data-toggle="modal" data-target="#addModal">Add New Appointment</button>
     </div>
 
     <br />
@@ -62,11 +62,13 @@
       <table id="display" class="table table-striped">
         <thead class="thead-dark">
           <tr>
-            <th>Announcement ID</th>
+            <th>Appointment ID</th>
+            <th>Senior ID</th>
+            <th>Full Name</th>
             <th>Barangay</th>
-            <th>Announcement Title</th>
-            <th>Announcement Description</th>
-            <th>Creation Date</th>
+            <th>Appointment Date</th>
+            <th>Appointment Time</th>
+            <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -180,11 +182,11 @@
         </button>
       </div>
       <div class="modal-body">
-        <p><strong>Announcement ID:</strong> <span id="viewAnnouncementID"></span></p>
+        <p><strong>Appointment ID:</strong> <span id="viewappointment_id"></span></p>
         <p><strong>Barangay:</strong> <span id="viewBarangay"></span></p>
-        <p><strong>Announcement Title:</strong> <span id="viewAnnouncement_title"></span></p>
-        <p><strong>Announcement Description:</strong> <span id="viewAnnouncement_description"></span></p>
-        <p><strong>Creation Date:</strong> <span id="viewCreation_date"></span></p>
+        <p><strong>Senior Full Name:</strong> <span id="viewfullname"></span></p>
+        <p><strong>Appointment Date:</strong> <span id="viewdate"></span></p>
+        <p><strong>Appointment Time:</strong> <span id="viewtime"></span></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -193,11 +195,13 @@
   </div>
 </div>
 
+
+<!-- Add Appointment -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addModalLabel">Add Account</h5>
+        <h5 class="modal-title" id="addModalLabel">Add Appointment</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -262,14 +266,21 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="Announcement_title">Announcement Title:</label>
-            <input type="text" class="form-control" id="addAnnouncement_title" name="Announcement_title"
-              placeholder="Announcement Title">
+            <label for="adddate">Appointment Date:</label><br>
+            <input class="form-control" type="date" id="adddate" name="adddate" placeholder="Date" min="1" required>
           </div>
           <div class="form-group">
-            <label for="Announcement_description">Announcement Description:</label>
-            <input type="text" class="form-control" id="addAnnouncement_description" name="Announcement_description"
-              placeholder="Announcement Description">
+            <label for="addapptime">Time:</label>
+            <select class="form-control" id="addapptime" name="addapptime" placeholder="Appointment Time" required>
+              <option value="">Select Time</option>
+              <option value="8:00 AM">8:00 AM</option>
+              <option value="9:00 AM">9:00 AM</option>
+              <option value="10:00 AM">10:00 AM</option>
+              <option value="11:00 AM">11:00 AM</option>
+              <option value="1:00 PM">1:00 PM</option>
+              <option value="2:00 PM">2:00 PM</option>
+              <option value="3:00 PM">3:00 PM</option>
+            </select>
           </div>
         </form>
       </div>
@@ -282,15 +293,14 @@
 </div>
 
 
-<div id="wait"
-  style="display:none;width:69px;height:89px;position:absolute;top:50%;left:50%;padding:2px;">
+<div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:50%;padding:2px;">
   <img src='img/demo_wait.gif' width="64" height="64" /><br>Loading..
 </div>
 
 <script src="js/sweetalert2@11.js"></script>
 <script>
   $(function () {
-    var AnnouncementID;
+    var appointment_id;
 
     $(document).ajaxStart(function () {
       $("#wait").css("display", "block");
@@ -299,8 +309,8 @@
       $("#wait").css("display", "none");
     });
 
-    function fetchannouncements() {
-      fetch('../REST/fetch-announcement', {
+    function fetchappointments() {
+      fetch('../REST/fetch-appointments', {
         method: 'GET'
       })
         .then(response => {
@@ -313,20 +323,47 @@
           const displayTableBody = document.querySelector('#display tbody');
           displayTableBody.innerHTML = '';
           if (data.length === 0 || (data.length === 1 && data[0].msg === "No Information found!")) {
-            displayTableBody.innerHTML = '<tr><td colspan="6">No information found</td></tr>';
+            displayTableBody.innerHTML = '<tr><td colspan="8">No information found</td></tr>';
           } else {
-            data.forEach(announcement => {
+            data.forEach(appointment => {
+              let buttons = '';
+
+              switch (appointment.status) {
+                case 'pending':
+                  buttons = `
+                <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>
+                <button class="w-75 mb-1 btn btn-success btnConfirm" onclick="confirmAppointment('${appointment.appointment_id}')">Confirm</button>
+                <button class="w-75 mb-1 btn btn-warning btnCancel" onclick="cancelAppointment('${appointment.appointment_id}')">Cancel</button>`;
+                  break;
+                case 'confirm':
+                  buttons = `
+                <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>
+                <button class="w-75 mb-1 btn btn-primary btnComplete" onclick="completeAppointment('${appointment.appointment_id}')">Complete</button>
+                <button class="w-75 mb-1 btn btn-danger btnDelete" onclick="deleteAppointment('${appointment.appointment_id}')">Delete</button>`;
+                  break;
+                case 'cancel':
+                  buttons = `
+                <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>
+                <button class="w-75 mb-1 btn btn-danger btnDelete" onclick="deleteAppointment('${appointment.appointment_id}')">Delete</button>`;
+                  break;
+                case 'complete':
+                  buttons = `
+                <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>
+                <button class="w-75 mb-1 btn btn-danger btnDelete" onclick="deleteAppointment('${appointment.appointment_id}')">Delete</button>`;
+                  break;
+                default:
+                  buttons = '';
+              }
+
               const row = `<tr class='data'>
-                        <td>${announcement.AnnouncementID}</td>
-                        <td>${announcement.Barangay}</td>
-                        <td>${announcement.Announcement_title}</td>
-                        <td>${announcement.Announcement_description}</td>
-                        <td>${announcement.Creation_date}</td>
-                        <td>
-                            <button class='w-75 mb-1 btn btn-info btnView'>View</button>
-                            <button class='w-75 mb-1 btn btn-warning btnEdit'>Edit</button>
-                            <button onclick="deleteannouncement('${announcement.AnnouncementID}')" class='w-75 mb-1 btn btn-danger'>Delete</button>
-                        </td>
+                        <td>${appointment.appointment_id}</td>
+                        <td>${appointment.senior_code}</td>
+                        <td>${appointment.fullname}</td>
+                        <td>${appointment.brgy}</td>
+                        <td>${appointment.appointment_date}</td>
+                        <td>${appointment.time}</td>
+                        <td>${appointment.status}</td>
+                        <td>${buttons}</td>
                     </tr>`;
               displayTableBody.innerHTML += row;
             });
@@ -335,11 +372,11 @@
         .catch(error => {
           console.error('Error fetching data:', error);
           const displayTableBody = document.querySelector('#display tbody');
-          displayTableBody.innerHTML = '<tr><td colspan="6">No information found</td></tr>';
+          displayTableBody.innerHTML = '<tr><td colspan="8">No information found</td></tr>';
         });
     }
+    fetchappointments();
 
-    fetchannouncements();
 
     $("#search").on("keyup", function () {
       var value = $(this).val().toLowerCase();
@@ -348,73 +385,21 @@
       });
     });
 
-    $('#display').on('click', '.btnEdit', function () {
-      var currentRow = $(this).closest("tr");
-      AnnouncementID = currentRow.find("td:eq(0)").text(); // Store the 
-      var Barangay = currentRow.find("td:eq(1)").text();
-      var Announcement_title = currentRow.find("td:eq(2)").text();
-      var Announcement_description = currentRow.find("td:eq(3)").text();
-
-      $('#AnnouncementID').val(AnnouncementID); // Ensure this field exists in the form
-      $('#Barangay').val(Barangay);
-      $('#Announcement_title').val(Announcement_title);
-      $('#Announcement_description').val(Announcement_description);
-
-      $('#editModal').modal('show');
-    });
-
-    $('#save').click(function () {
-      var Barangay = $('#Barangay').val();
-      var Announcement_title = $('#Announcement_title').val();
-      var Announcement_description = $('#Announcement_description').val();
-
-      var requestData = {
-        AnnouncementID: AnnouncementID, // Send the AnnouncementID
-        Barangay: Barangay,
-        Announcement_title: Announcement_title,
-        Announcement_description: Announcement_description,
-      };
-
-      $.ajax({
-        method: "PUT",
-        url: "../REST/edit-announcement",
-        data: JSON.stringify(requestData),
-        contentType: "application/json",
-        success: function (result) {
-          Swal.fire({
-            title: "Edit Announcement",
-            text: result.msg,
-            icon: "success"
-          }).then(() => {
-            $('#editModal').modal('hide');
-            fetchannouncements();
-          });
-        },
-        error: function (result, jqXHR, textStatus, errorThrown) {
-          console.error('Error editing information');
-          Swal.fire({
-            title: "Edit Announcement",
-            text: "Failed to edit announcement information",
-            icon: "error"
-          });
-        }
-      });
-    });
-
+    // Save the appointment
     $('#addSave').click(function () {
       var Barangay = $('#addBarangay').val();
-      var Announcement_title = $('#addAnnouncement_title').val();
-      var Announcement_description = $('#addAnnouncement_description').val();
+      var Appointment_date = $('#adddate').val();
+      var Appointment_time = $('#addapptime').val();
 
       var requestData = {
         Barangay: Barangay,
-        Announcement_title: Announcement_title,
-        Announcement_description: Announcement_description
+        Appointment_date: Appointment_date,
+        Appointment_time: Appointment_time
       };
 
       $.ajax({
         method: "PUT",
-        url: "../REST/add-announcement",
+        url: "../REST/add-appointment", // Update the URL to your actual endpoint
         data: JSON.stringify(requestData),
         contentType: "application/json",
         success: function (result) {
@@ -423,21 +408,21 @@
           }
 
           Swal.fire({
-            title: "Add Announcement",
+            title: "Add Appointment",
             text: result.message,
             icon: result.status === 'success' ? "success" : "error"
           }).then(() => {
             if (result.status === 'success') {
               $('#addModal').modal('hide');
-              fetchannouncements();
+              fetchappointments();
             }
           });
         },
         error: function (jqXHR, textStatus, errorThrown) {
           console.error('Error adding information:', errorThrown);
           Swal.fire({
-            title: "Add Announcement",
-            text: "Failed to add announcement",
+            title: "Add Appointment",
+            text: "Failed to add appointment",
             icon: "error"
           });
         }
@@ -446,48 +431,22 @@
 
     $('#display').on('click', '.btnView', function () {
       var currentRow = $(this).closest("tr");
-      var AnnouncementID = currentRow.find("td:eq(0)").text();
-      var Barangay = currentRow.find("td:eq(1)").text();
-      var Announcement_title = currentRow.find("td:eq(2)").text();
-      var Announcement_description = currentRow.find("td:eq(3)").text();
-      var Creation_date = currentRow.find("td:eq(4)").text();
+      var appointment_id = currentRow.find("td:eq(0)").text();
+      var fullname = currentRow.find("td:eq(2)").text();
+      var Barangay = currentRow.find("td:eq(3)").text();
+      var appdate = currentRow.find("td:eq(4)").text();
+      var apptime = currentRow.find("td:eq(5)").text();
 
-      $('#viewAnnouncementID').text(AnnouncementID);
+      $('#viewappointment_id').text(appointment_id);
       $('#viewBarangay').text(Barangay);
-      $('#viewAnnouncement_title').text(Announcement_title);
-      $('#viewAnnouncement_description').text(Announcement_description);
-      $('#viewCreation_date').text(Creation_date);
+      $('#viewfullname').text(fullname);
+      $('#viewdate').text(appdate);
+      $('#viewtime').text(apptime);
 
       $('#viewModal').modal('show');
     });
 
-    window.deleteannouncement = function (AnnouncementID) {
-      console.log('Deleting announcement with ID:', AnnouncementID);
-      $.ajax({
-        url: '../REST/delete-announcement',
-        method: 'DELETE',
-        contentType: 'application/json',
-        data: JSON.stringify({ AnnouncementID: AnnouncementID }),
-        success: function (result) {
-          console.log('Delete request successful:', result);
-          Swal.fire({
-            title: "Delete Announcement",
-            text: result.msg,
-            icon: "success"
-          }).then(() => {
-            fetchannouncements();
-          });
-        },
-        error: function (result, jqXHR, textStatus, errorThrown) {
-          console.error('Error deleting announcement');
-          Swal.fire({
-            title: "Delete Announcement",
-            text: "Failed to delete announcement",
-            icon: "error"
-          });
-        }
-      });
-    };
+
   });
 
   function checkUsertype() {
@@ -533,6 +492,136 @@
   $(document).ready(function () {
     checkUsertype();
   });
+
+  document.getElementById('adddate').addEventListener('input', function (e) {
+    var day = new Date(this.value).getUTCDay();
+    if ([6, 0].includes(day)) {
+      e.preventDefault();
+      this.value = '';
+      Swal.fire({
+        title: "Invalid Date",
+        text: "Weekends are not allowed. Please select a weekday.",
+        icon: "error",
+        timer: 3000,
+        timerProgressBar: true
+      });
+    }
+  });
+
+  function confirmAppointment(appointmentId) {
+    console.log('Confirming appointment with ID:', appointmentId);
+    $.ajax({
+      url: '../REST/confirm-appointment',
+      method: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify({ appointment_id: appointmentId }),
+      success: function (result) {
+        console.log('Confirm request successful:', result);
+        Swal.fire({
+          title: "Confirm Appointment",
+          text: result.msg,
+          icon: "success"
+        }).then(() => {
+          location.reload();
+        });
+      },
+      error: function (result, jqXHR, textStatus, errorThrown) {
+        console.error('Error confirming appointment');
+        Swal.fire({
+          title: "Confirm Appointment",
+          text: "Failed to confirm appointment",
+          icon: "error"
+        });
+      }
+    });
+  }
+
+
+  function cancelAppointment(appointmentId) {
+    console.log('Cancelling appointment with ID:', appointmentId);
+    $.ajax({
+      url: '../REST/cancel-appointment',
+      method: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify({ appointment_id: appointmentId }),
+      success: function (result) {
+        console.log('Cancel request successful:', result);
+        Swal.fire({
+          title: "Cancel Appointment",
+          text: result.msg,
+          icon: "success"
+        }).then(() => {
+          location.reload();
+        });
+      },
+      error: function (result, jqXHR, textStatus, errorThrown) {
+        console.error('Error cancelling appointment');
+        Swal.fire({
+          title: "Cancel Appointment",
+          text: "Failed to cancel appointment",
+          icon: "error"
+        });
+      }
+    });
+  }
+
+
+  function completeAppointment(appointmentId) {
+    console.log('Completing appointment with ID:', appointmentId);
+    $.ajax({
+      url: '../REST/complete-appointment',
+      method: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify({ appointment_id: appointmentId }),
+      success: function (result) {
+        console.log('Complete request successful:', result);
+        Swal.fire({
+          title: "Complete Appointment",
+          text: result.msg,
+          icon: "success"
+        }).then(() => {
+          location.reload();
+        });
+      },
+      error: function (result, jqXHR, textStatus, errorThrown) {
+        console.error('Error completing appointment');
+        Swal.fire({
+          title: "Complete Appointment",
+          text: "Failed to complete appointment",
+          icon: "error"
+        });
+      }
+    });
+  }
+
+
+  function deleteAppointment(appointmentId) {
+    console.log('Deleting appointment with ID:', appointmentId);
+    $.ajax({
+      url: '../REST/delete-appointment',
+      method: 'DELETE',
+      contentType: 'application/json',
+      data: JSON.stringify({ appointment_id: appointmentId }),
+      success: function (result) {
+        console.log('Delete request successful:', result);
+        Swal.fire({
+          title: "Delete Announcement",
+          text: result.msg,
+          icon: "success"
+        }).then(() => {
+          location.reload();
+        });
+      },
+      error: function (result, jqXHR, textStatus, errorThrown) {
+        console.error('Error deleting announcement');
+        Swal.fire({
+          title: "Delete Announcement",
+          text: "Failed to delete announcement",
+          icon: "error"
+        });
+      }
+    });
+  }
 
 </script>
 

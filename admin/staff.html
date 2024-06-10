@@ -34,6 +34,9 @@
           <a class="nav-link" href="announcement.html">Announcement</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="appointments.html">Appointments</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link active" href="staff.html">Staff</a>
         </li>
         <li class="nav-item">
@@ -63,6 +66,7 @@
             <th>Full Name</th>
             <th>Username</th>
             <th>Password</th>
+            <th>Brgy Affiliation</th>
             <th>User Type</th>
             <th>Action</th>
           </tr>
@@ -106,6 +110,63 @@
                 <option value="senior">Senior</option>
               </select>
             </div>
+            <div class="form-group">
+              <label for="editbrgy">Barangay:</label>
+              <select class="form-control" id="editbrgy" name="editbrgy" placeholder="Barangay">
+                <option value="">Choose Barangay</option>
+                <option value="Aguada">Aguada</option>
+                <option value="Bacolod">Bacolod</option>
+                <option value="Bagakay">Bagakay</option>
+                <option value="Balintawak">Balintawak</option>
+                <option value="Banadero">Banadero</option>
+                <option value="Baybay San Roque">Baybay San Roque</option>
+                <option value="Baybay Santa Cruz">Baybay Santa Cruz</option>
+                <option value="Baybay Triunfo">Baybay Triunfo</option>
+                <option value="Bongbong">Bongbong</option>
+                <option value="Calabayan">Calabayan</option>
+                <option value="Capucao C">Capucao C</option>
+                <option value="Capucao P">Capucao P</option>
+                <option value="Carangan">Carangan</option>
+                <option value="Carmen Annex">Carmen Annex</option>
+                <option value="Catadman-Manabay">Catadman-Manabay</option>
+                <option value="Cavinte">Cavinte</option>
+                <option value="Cogon">Cogon</option>
+                <option value="Dalapang">Dalapang</option>
+                <option value="Diguan">Diguan</option>
+                <option value="Dimaluna">Dimaluna</option>
+                <option value="Doña Consuelo">Doña Consuelo</option>
+                <option value="Embargo">Embargo</option>
+                <option value="Gala">Gala</option>
+                <option value="Gango">Gango</option>
+                <option value="Gotokan Daku">Gotokan Daku</option>
+                <option value="Gotokan Diot">Gotokan Diot</option>
+                <option value="Guimad">Guimad</option>
+                <option value="Guingona">Guingona</option>
+                <option value="Kinuman Norte">Kinuman Norte</option>
+                <option value="Kinuman Sur">Kinuman Sur</option>
+                <option value="Labinay">Labinay</option>
+                <option value="Labo">Labo</option>
+                <option value="Lam-an">Lam-an</option>
+                <option value="Liposong">Liposong</option>
+                <option value="Litapan">Litapan</option>
+                <option value="Malaubang">Malaubang</option>
+                <option value="Manaka">Manaka</option>
+                <option value="Maningcol">Maningcol</option>
+                <option value="Mentering">Mentering</option>
+                <option value="Molicay">Molicay</option>
+                <option value="Pantaon">Pantaon</option>
+                <option value="Pulot">Pulot</option>
+                <option value="San Antonio">San Antonio</option>
+                <option value="Sangay Daku">Sangay Daku</option>
+                <option value="Sangay Diot">Sangay Diot</option>
+                <option value="Sinuza">Sinuza</option>
+                <option value="Stimson Abordo">Stimson Abordo</option>
+                <option value="Tabid">Tabid</option>
+                <option value="Tinago">Tinago</option>
+                <option value="Trigos">Trigos</option>
+                <option value="50th District">50th District</option>
+              </select>
+            </div>
           </form>
         </div>
         <div class="modal-footer">
@@ -130,6 +191,7 @@
         </div>
         <div class="modal-body">
           <p><strong>Staff ID:</strong> <span id="viewstaffid"></span></p>
+          <p><strong>Barangay:</strong> <span id="viewstaffbrgy"></span></p>
           <p><strong>Full Name:</strong> <span id="viewfullname"></span></p>
           <p><strong>Username:</strong> <span id="viewusername"></span></p>
           <p><strong>Password:</strong> <span id="viewpassword"></span></p>
@@ -172,6 +234,63 @@
                 required>
                 <option value="">Select User Type</option>
                 <option value="staff">Staff</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="addbrgy">Barangay:</label>
+              <select class="form-control" id="addbrgy" name="addbrgy" placeholder="Barangay">
+                <option value="">Choose Barangay</option>
+                <option value="Aguada">Aguada</option>
+                <option value="Bacolod">Bacolod</option>
+                <option value="Bagakay">Bagakay</option>
+                <option value="Balintawak">Balintawak</option>
+                <option value="Banadero">Banadero</option>
+                <option value="Baybay San Roque">Baybay San Roque</option>
+                <option value="Baybay Santa Cruz">Baybay Santa Cruz</option>
+                <option value="Baybay Triunfo">Baybay Triunfo</option>
+                <option value="Bongbong">Bongbong</option>
+                <option value="Calabayan">Calabayan</option>
+                <option value="Capucao C">Capucao C</option>
+                <option value="Capucao P">Capucao P</option>
+                <option value="Carangan">Carangan</option>
+                <option value="Carmen Annex">Carmen Annex</option>
+                <option value="Catadman-Manabay">Catadman-Manabay</option>
+                <option value="Cavinte">Cavinte</option>
+                <option value="Cogon">Cogon</option>
+                <option value="Dalapang">Dalapang</option>
+                <option value="Diguan">Diguan</option>
+                <option value="Dimaluna">Dimaluna</option>
+                <option value="Doña Consuelo">Doña Consuelo</option>
+                <option value="Embargo">Embargo</option>
+                <option value="Gala">Gala</option>
+                <option value="Gango">Gango</option>
+                <option value="Gotokan Daku">Gotokan Daku</option>
+                <option value="Gotokan Diot">Gotokan Diot</option>
+                <option value="Guimad">Guimad</option>
+                <option value="Guingona">Guingona</option>
+                <option value="Kinuman Norte">Kinuman Norte</option>
+                <option value="Kinuman Sur">Kinuman Sur</option>
+                <option value="Labinay">Labinay</option>
+                <option value="Labo">Labo</option>
+                <option value="Lam-an">Lam-an</option>
+                <option value="Liposong">Liposong</option>
+                <option value="Litapan">Litapan</option>
+                <option value="Malaubang">Malaubang</option>
+                <option value="Manaka">Manaka</option>
+                <option value="Maningcol">Maningcol</option>
+                <option value="Mentering">Mentering</option>
+                <option value="Molicay">Molicay</option>
+                <option value="Pantaon">Pantaon</option>
+                <option value="Pulot">Pulot</option>
+                <option value="San Antonio">San Antonio</option>
+                <option value="Sangay Daku">Sangay Daku</option>
+                <option value="Sangay Diot">Sangay Diot</option>
+                <option value="Sinuza">Sinuza</option>
+                <option value="Stimson Abordo">Stimson Abordo</option>
+                <option value="Tabid">Tabid</option>
+                <option value="Tinago">Tinago</option>
+                <option value="Trigos">Trigos</option>
+                <option value="50th District">50th District</option>
               </select>
             </div>
           </form>
@@ -223,6 +342,7 @@
                              <td>${staff.fullname}</td>
                              <td>${staff.username}</td>
                              <td>${staff.password}</td>
+                             <td>${staff.brgy}</td>
                              <td>${staff.usertype}</td>
                              <td>
                               <button class='btn btn-info btnView'>View</button>
@@ -256,12 +376,14 @@
         var fullname = currentRow.find("td:eq(1)").text();
         var username = currentRow.find("td:eq(2)").text();
         var password = currentRow.find("td:eq(3)").text();
-        var usertype = currentRow.find("td:eq(4)").text();
+        var brgy = currentRow.find("td:eq(4)").text();
+        var usertype = currentRow.find("td:eq(5)").text();
 
-        $('#staffid').val(staffid); // Ensure this field exists in the form
-        $('#fullname').val(fullname); // Ensure this field exists in the form
+        $('#staffid').val(staffid); 
+        $('#fullname').val(fullname); 
         $('#username').val(username);
         $('#password').val(password);
+        $('#editbrgy').val(brgy);
         $('#usertype').val(usertype);
 
         $('#editModal').modal('show');
@@ -271,6 +393,7 @@
         var fullname = $('#fullname').val();
         var username = $('#username').val();
         var password = $('#password').val();
+        var brgy = $('#editbrgy').val();
         var usertype = $('#usertype').val();
 
         var requestData = {
@@ -278,6 +401,7 @@
           fullname: fullname,
           username: username,
           password: password,
+          brgy: brgy,
           usertype: usertype,
         };
 
@@ -311,12 +435,14 @@
         var fullname = $('#addfullname').val();
         var username = $('#addusername').val();
         var password = $('#addpassword').val();
+        var brgy = $('#addbrgy').val();
         var usertype = $('#addusertype').val();
 
         var data = JSON.stringify({
           fullname: fullname,
           username: username,
           password: password,
+          brgy: brgy,
           usertype: usertype
         });
 
@@ -372,12 +498,15 @@
         var fullname = currentRow.find("td:eq(1)").text();
         var username = currentRow.find("td:eq(2)").text();
         var password = currentRow.find("td:eq(3)").text();
-        var usertype = currentRow.find("td:eq(4)").text();
+        var brgy = currentRow.find("td:eq(4)").text();
+        var usertype = currentRow.find("td:eq(5)").text();
+
 
         $('#viewstaffid').text(staffid);
         $('#viewfullname').text(fullname);
         $('#viewusername').text(username);
         $('#viewpassword').text(password);
+        $('#viewstaffbrgy').text(brgy);
         $('#viewusertype').text(usertype);
 
         $('#viewModal').modal('show');

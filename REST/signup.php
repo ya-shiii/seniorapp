@@ -34,10 +34,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
             $sql = "INSERT INTO tblsenior (username, fullname, password, status) VALUES ('$username', '$fullname', '$password', '$status')";
             
             if (mysqli_query($connection, $sql)) {
-                // If insertion is successful
-                $response = array('status' => 'success', 'msg' => 'Signup successful.');
+                $response = array('status' => 'success', 'msg' => 'Signup successful. Please wait for admin approval.');
+                // Upload default profile picture
+                $defaultImagePath = '../REST/img/defaultpicture.jpg';
+                $query = "UPDATE tblsenior SET image='$defaultImagePath' WHERE username='$username'";
+                $result = mysqli_query($connection, $query);
+                if (!$result) {
+                    // Handle error
+                }
             } else {
-                // If there's an error during insertion
                 $response = array('status' => 'fail', 'msg' => 'Signup failed: ' . mysqli_error($connection));
             }
         }

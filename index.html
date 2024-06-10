@@ -1,213 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rural Transit Bus</title>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/jquery.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
-    <style>
-        /* Importing fonts from Google */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-
-        /* Resetting */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background: #ecf0f3;
-        }
-
-        .wrapper {
-            max-width: 350px;
-            min-height: 500px;
-            margin: 80px auto;
-            padding: 40px 30px 30px 30px;
-            background-color: #ecf0f3;
-            border-radius: 15px;
-            box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #fff;
-        }
-
-        .logo {
-            width: 200px;
-            margin: auto;
-        }
-
-        .logo img {
-            width: 100%;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 50%;
-            box-shadow: 0px 0px 3px #5f5f5f,
-                0px 0px 0px 5px #ecf0f3,
-                8px 8px 15px #a7aaa7,
-                -8px -8px 15px #fff;
-        }
-
-        .wrapper .name {
-            font-weight: 600;
-            font-size: 1.4rem;
-            letter-spacing: 1.3px;
-            padding-left: 10px;
-            color: #555;
-        }
-
-        .wrapper .form-field input {
-            width: 100%;
-            display: block;
-            border: none;
-            outline: none;
-            background: none;
-            font-size: 1.2rem;
-            color: #666;
-            padding: 10px 15px 10px 10px;
-        }
-
-        .wrapper .form-field {
-            padding-left: 10px;
-            margin-bottom: 20px;
-            border-radius: 20px;
-            box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
-        }
-
-        .wrapper .form-field .fas {
-            color: #555;
-        }
-
-        .wrapper .btn {
-            box-shadow: none;
-            width: 100%;
-            height: 40px;
-            background-color: #03A9F4;
-            color: #fff;
-            border-radius: 25px;
-            box-shadow: 3px 3px 3px #b1b1b1,
-                -3px -3px 3px #fff;
-            letter-spacing: 1.3px;
-        }
-
-        .wrapper .btn:hover {
-            background-color: hsl(0, 97%, 45%);
-        }
-
-        .wrapper a {
-            text-decoration: none;
-            font-size: 0.8rem;
-            color: #03A9F4;
-        }
-
-        .wrapper a:hover {
-            color: #039BE5;
-        }
-
-        @media(max-width: 380px) {
-            .wrapper {
-                margin: 30px 20px;
-                padding: 40px 15px 15px 15px;
-            }
-        }
-    </style>
+  <title>SCMS</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="includes/css/bootstrap.min.css">
+  <link rel="stylesheet" href="includes/css/index.css">
+  <script src="includes/js/jquery.min.js"></script>
+  <script src="includes/js/popper.min.js"></script>
+  <script src="includes/js/bootstrap.bundle.min.js"></script>
 </head>
-
 <body>
-    <div class="wrapper">
 
-        <div class="text-center mt-4 name">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">
+      <img src="includes/img/senior.png" alt="logo" style="width:50px;"> SCMS
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="index.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="login.html">Login</a>
+        </li>
+      </ul>
+    </div>  
+  </nav>
+  <br>
+  
 
-        </div>
-        <form class="p-3 mt-3" id="loginForm">
-            <div class="form-field d-flex align-items-center">
-                <span class="far fa-user"></span>
-                <input type="text" name="uname" id="uname" placeholder="Username" required>
+
+  <section id="about" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2>About Us</h2>
+                <p>We are dedicated to providing comprehensive services and support to senior citizens. Our system offers easy access to vital information and resources tailored specifically for seniors.</p>
+                <br><br>
+                <p>Allowing senior citizens to set barangay appointments to remove hassles and be entertained 100%.</p>
             </div>
-            <div class="form-field d-flex align-items-center">
-                <span class="fas fa-key"></span>
-                <input type="password" name="pass" id="pass" placeholder="Password" required>
+            <div class="col-lg-6">
+                <img src="includes/img/seniorpic1.jpg" alt="About Us" class="img-fluid rounded">
             </div>
-            <button type="submit" class="btn mt-3">Login</button>
-        </form>
-        <div class="text-center fs-6">
-            <p>Become a member, <a href="signup.html" id="signupLink">Sign up</a></p>
         </div>
     </div>
+  </section>
 
 
-    <script>
-        $(document).ready(function () {
-            // Login form
-            $('#loginForm').on('submit', function (e) {
-                e.preventDefault();
-    
-                const username = $('#uname').val();
-                const password = $('#pass').val();
-    
-                $.ajax({
-                    url: 'REST/login',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ username: username, password: password }),
-    
-                    success: function (response) {
-                        console.log(response); // Add logging to the console for debugging
-                        if (response.status === 'fail') {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Login failed',
-                                text: response.msg
-                            });
-                        } else {
-                            const uname = response.username;
-                            const utype = response.usertype;
-    
-                            Cookies.set('username', uname, { expires: 1, path: '/' });
-                            Cookies.set('usertype', utype, { expires: 1, path: '/' });
-    
-                            let redirectUrl = '';
-    
-                            if (utype === 'admin') {
-                                redirectUrl = 'admin/dashboard.html';
-                            } else if (utype === 'staff') {
-                                redirectUrl = 'staff/dashboard.html';
-                            } else if (utype === 'user') {
-                                redirectUrl = 'senior/dashboard.html';
-                            }
-    
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Login successful',
-                                text: 'Welcome ' + response.username,
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(() => {
-                                // Redirect to the appropriate page
-                                window.location.href = redirectUrl;
-                            });
-                        }
-                    },
-                    error: function (jqXHR) {
-                        console.error('Error:', jqXHR); // Log error to the console
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'An error occurred',
-                            text: 'Please try again. Status: ' + jqXHR.status + ' Response: ' + jqXHR.responseText
-                        });
-                    }
-                });
-            });
-        });
-    </script>
-    
-  
+
+ 
+
+  <footer class="footer">
+    &copy; Senior Citizen Management System
+</footer>
+
+
+
 </body>
-
 </html>
