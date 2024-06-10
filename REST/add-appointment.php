@@ -22,7 +22,7 @@ if (empty($brgy) || empty($appointment_date) || empty($time)) {
     exit;
 }
 
-$checkSql = "SELECT * FROM tblappointment WHERE senior_code = '$session_id' AND status = 'pending'";
+$checkSql = "SELECT * FROM tblappointment WHERE senior_code = '$session_id' AND fullname = '$fullname' AND status = 'pending'";
 $result = mysqli_query($connection, $checkSql);
 
 if (mysqli_num_rows($result) > 0) {

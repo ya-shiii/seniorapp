@@ -42,7 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $response = array(
                         'status' => 'success',
                         'username' => $user['username'],
-                        'usertype' => 'user'
+                        'usertype' => 'user',
+                        'fullname' => $user['fullname']
                     );
                 } else {
                     // If password doesn't match
@@ -64,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['session_id'] = $user['staffid'];
                     $_SESSION['usertype'] = $user['usertype'];
                     $_SESSION['fullname'] = $user['fullname'];
+                    $_SESSION['brgy'] = $user['brgy'];
 
                     $response = array(
                         'status' => 'success',

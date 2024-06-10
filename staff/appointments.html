@@ -310,7 +310,7 @@
     });
 
     function fetchappointments() {
-      fetch('../REST/fetch-appointments', {
+      fetch('../REST/fetch-appointments-staff', {
         method: 'GET'
       })
         .then(response => {
@@ -455,6 +455,7 @@
         if (response.usertype === 'staff') {
           // Usertype is valid, you can add further logic here if needed
           console.log('Usertype:', response.usertype);
+          console.log('Usertype:', response.brgy);
         } else {
           // Invalid usertype or status not success
           Swal.fire({
