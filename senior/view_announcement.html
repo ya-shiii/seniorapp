@@ -12,6 +12,7 @@
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
   <script src="js/sweetalert2@11.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
   <style>
     .announcement-card {
       border: 1px solid #ddd;
@@ -67,7 +68,7 @@
           <a class="nav-link" href="view_record.html">Personal Record</a>
         </li>
         <li class="nav-item">
-          <a href="../REST/logout.php" class="btn btn-danger h-full">Logout</a>
+          <a href="../" class="btn btn-danger h-full">Logout</a>
         </li>
       </ul>
     </div>
@@ -100,10 +101,16 @@
     });
 
     function fetchAnnouncements() {
+      // Get barangay (brgy) from cookies
+      const brgy = Cookies.get('brgy');
+
       $.ajax({
-        url: '../REST/fetch-announcement', // Adjust this URL if necessary
+        url: '../REST/fetch-announcement-senior', // Adjust this URL if necessary
         method: 'GET',
         dataType: 'json',
+        headers: {
+          'Barangay': brgy // Pass the barangay value in a custom header
+        },
         success: function (response) {
           console.log(response);
           const announcementsContainer = $('.announcements-container');
@@ -134,6 +141,8 @@
       });
     }
 
+
+
     fetchAnnouncements();
 
     $("#search").on("keyup", function () {
@@ -143,45 +152,34 @@
       });
     });
 
-
-    function checkUsertype() {
-      $.ajax({
-        url: '../REST/check-usertype',
-        method: 'GET',
-        dataType: 'json',
-        success: function (response) {
-          if (response.usertype === 'senior') {
-            // Usertype is valid, you can add further logic here if needed
-            console.log('Usertype:', response.usertype);
-          } else {
-            // Invalid usertype or status not success
-            Swal.fire({
-              title: "Unauthorized",
-              text: "You are not authorized to view this page. Logging out...",
-              icon: "error",
-              timer: 3000,
-              timerProgressBar: true,
-              didClose: () => {
-                window.location.href = '../REST/logout'; // Redirect to logout
-              }
-            });
-          }
-        },
-        error: function () {
-          // Handle error
-          Swal.fire({
-            title: "Error",
-            text: "Failed to verify user. Logging out...",
-            icon: "error",
-            timer: 3000,
-            timerProgressBar: true,
-            didClose: () => {
-              window.location.href = '../REST/logout'; // Redirect to logout
-            }
-          });
-        }
-      });
+    // Function to retrieve cookie value by name
+    function getCookie(name) {
+      return Cookies.get(name);
     }
+    // Function to check user type from cookies
+    function checkUsertype() {
+      // Get the usertype cookie
+      const brgy = getCookie('brgy');
+      const usertype = getCookie('usertype');
+
+      if (usertype === 'senior') {
+        // Usertype is valid, you can add further logic here if needed
+        console.log('Usertype:', brgy+' '+usertype);
+      } else {
+        // Invalid usertype or usertype not found
+        Swal.fire({
+          title: "Unauthorized",
+          text: "You are not authorized to view this page. Logging out...",
+          icon: "error",
+          timer: 3000,
+          timerProgressBar: true,
+          didClose: () => {
+            window.location.href = '../REST/logout'; // Redirect to logout
+          }
+        });
+      }
+    }
+
 
     // Call the function to check usertype on page load
     $(document).ready(function () {

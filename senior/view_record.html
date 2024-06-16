@@ -11,6 +11,7 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 </head>
 
 <body>
@@ -37,7 +38,7 @@
           <a class="nav-link active" href="view_record.html">Personal Record</a>
         </li>
         <li class="nav-item">
-          <a href="../REST/logout.php" class="btn btn-danger h-full">Logout</a>
+          <a href="../" class="btn btn-danger h-full">Logout</a>
         </li>
       </ul>
     </div>
@@ -104,8 +105,61 @@
             </div>
             <div class="form-group">
               <label for="address">Address:</label>
-              <input class="form-control col-lg-12 col-md-12" type="text" id="address" name="address"
-                placeholder="address">
+              <select class="form-control col-lg-12 col-md-12" id="address" name="address" placeholder="Address"
+                required>
+                <option value="">Choose Barangay</option>
+                <option value="Aguada">Aguada</option>
+                <option value="Bacolod">Bacolod</option>
+                <option value="Bagakay">Bagakay</option>
+                <option value="Balintawak">Balintawak</option>
+                <option value="Banadero">Banadero</option>
+                <option value="Baybay San Roque">Baybay San Roque</option>
+                <option value="Baybay Santa Cruz">Baybay Santa Cruz</option>
+                <option value="Baybay Triunfo">Baybay Triunfo</option>
+                <option value="Bongbong">Bongbong</option>
+                <option value="Calabayan">Calabayan</option>
+                <option value="Capucao C">Capucao C</option>
+                <option value="Capucao P">Capucao P</option>
+                <option value="Carangan">Carangan</option>
+                <option value="Carmen Annex">Carmen Annex</option>
+                <option value="Catadman-Manabay">Catadman-Manabay</option>
+                <option value="Cavinte">Cavinte</option>
+                <option value="Cogon">Cogon</option>
+                <option value="Dalapang">Dalapang</option>
+                <option value="Diguan">Diguan</option>
+                <option value="Dimaluna">Dimaluna</option>
+                <option value="Doña Consuelo">Doña Consuelo</option>
+                <option value="Embargo">Embargo</option>
+                <option value="Gala">Gala</option>
+                <option value="Gango">Gango</option>
+                <option value="Gotokan Daku">Gotokan Daku</option>
+                <option value="Gotokan Diot">Gotokan Diot</option>
+                <option value="Guimad">Guimad</option>
+                <option value="Guingona">Guingona</option>
+                <option value="Kinuman Norte">Kinuman Norte</option>
+                <option value="Kinuman Sur">Kinuman Sur</option>
+                <option value="Labinay">Labinay</option>
+                <option value="Labo">Labo</option>
+                <option value="Lam-an">Lam-an</option>
+                <option value="Liposong">Liposong</option>
+                <option value="Litapan">Litapan</option>
+                <option value="Malaubang">Malaubang</option>
+                <option value="Manaka">Manaka</option>
+                <option value="Maningcol">Maningcol</option>
+                <option value="Mentering">Mentering</option>
+                <option value="Molicay">Molicay</option>
+                <option value="Pantaon">Pantaon</option>
+                <option value="Pulot">Pulot</option>
+                <option value="San Antonio">San Antonio</option>
+                <option value="Sangay Daku">Sangay Daku</option>
+                <option value="Sangay Diot">Sangay Diot</option>
+                <option value="Sinuza">Sinuza</option>
+                <option value="Stimson Abordo">Stimson Abordo</option>
+                <option value="Tabid">Tabid</option>
+                <option value="Tinago">Tinago</option>
+                <option value="Trigos">Trigos</option>
+                <option value="50th District">50th District</option>
+              </select>
             </div>
             <div class="form-group">
               <label for="contactnumber">Contact Number:</label>
@@ -186,8 +240,14 @@
     });
 
     function fetchSeniorCitizens() {
-      fetch('../REST/fetch-senior-details', {
-        method: 'GET'
+
+      const session_id = Cookies.get('session_id');
+
+      fetch(`../REST/fetch-senior-details?session_id=${encodeURIComponent(session_id)}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
         .then(response => {
           if (!response.ok) {
@@ -251,8 +311,8 @@
       var fullname = currentRow.find("td:eq(2)").text();
       var dob = currentRow.find("td:eq(3)").text();
       var age = currentRow.find("td:eq(4)").text();
-      var address = currentRow.find("td:eq(5)").text();
-      var contactnumber = currentRow.find("td:eq(6)").text();
+      var address = currentRow.find("td:eq(6)").text();
+      var contactnumber = currentRow.find("td:eq(5)").text();
       var username = currentRow.find("td:eq(7)").text();
       var password = currentRow.find("td:eq(8)").text();
       var imageSrc = $(this).data("image") + '?' + new Date().getTime();
@@ -300,6 +360,11 @@
         data: JSON.stringify(requestData),
         contentType: "application/json",
         success: function (result) {
+
+          Cookies.set('username', $('#username').val(), { expires: 1, path: '/' });
+          Cookies.set('brgy', $('#address').val(), { expires: 1, path: '/' });
+          Cookies.set('fullname', $('#fullname').val(), { expires: 1, path: '/' });
+
           console.log("Senior Info Update Result:", result); // Log the result of senior info update
 
           // Check if a new image is uploaded
@@ -325,6 +390,7 @@
                 success: function (result) {
                   //console.log("Image Update Result:", result); //For debugging
                   // Handle success response
+
                   if (JSON.parse(result).status === 'success' && JSON.parse(result).message.includes('Senior information updated successfully')) {
                     // Display success message
                     Swal.fire({
@@ -429,7 +495,7 @@
       }
       return age;
     }
-  
+
     function showError() {
       Swal.fire({
         title: "Error age",
@@ -437,7 +503,7 @@
         icon: "error"
       });
     }
-  
+
     $(document).ready(function () {
       $('#editdob').change(function () {
         var dob = $(this).val();
@@ -450,7 +516,7 @@
           $('#editage').val('');
         }
       });
-  
+
       $('#dob').change(function () {
         var dob = $(this).val();
         var age = calculateAge(dob);
@@ -463,44 +529,32 @@
         }
       });
     });
-    
+
+    // Function to retrieve cookie value by name
+    function getCookie(name) {
+      return Cookies.get(name);
+    }
+    // Function to check user type from cookies
     function checkUsertype() {
-      $.ajax({
-        url: '../REST/check-usertype',
-        method: 'GET',
-        dataType: 'json',
-        success: function (response) {
-          if (response.usertype === 'senior') {
-            // Usertype is valid, you can add further logic here if needed
-            console.log('Usertype:', response.usertype);
-          } else {
-            // Invalid usertype or status not success
-            Swal.fire({
-              title: "Unauthorized",
-              text: "You are not authorized to view this page. Logging out...",
-              icon: "error",
-              timer: 3000,
-              timerProgressBar: true,
-              didClose: () => {
-                window.location.href = '../REST/logout'; // Redirect to logout
-              }
-            });
+      // Get the usertype cookie
+      const usertype = getCookie('usertype');
+
+      if (usertype === 'senior') {
+        // Usertype is valid, you can add further logic here if needed
+        console.log('Usertype:', usertype);
+      } else {
+        // Invalid usertype or usertype not found
+        Swal.fire({
+          title: "Unauthorized",
+          text: "You are not authorized to view this page. Logging out...",
+          icon: "error",
+          timer: 3000,
+          timerProgressBar: true,
+          didClose: () => {
+            window.location.href = '../REST/logout'; // Redirect to logout
           }
-        },
-        error: function () {
-          // Handle error
-          Swal.fire({
-            title: "Error",
-            text: "Failed to verify user. Logging out...",
-            icon: "error",
-            timer: 3000,
-            timerProgressBar: true,
-            didClose: () => {
-              window.location.href = '../REST/logout'; // Redirect to logout
-            }
-          });
-        }
-      });
+        });
+      }
     }
 
     // Call the function to check usertype on page load

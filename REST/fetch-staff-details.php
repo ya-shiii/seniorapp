@@ -1,13 +1,19 @@
 <?php
+// Allow CORS
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Handle preflight requests (OPTIONS)
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    exit(0);
+}
 // Include the database connection file
 include 'conn.php';
-session_start();
 
-// Check if the request method is GET
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Get the staffid from the session
-    if (isset($_SESSION['session_id'])) {
-        $staffid = mysqli_real_escape_string($connection, $_SESSION['session_id']);
+    if (isset($_GET['session_id'])) {
+        $staffid = mysqli_real_escape_string($connection, $_GET['session_id']);
 
         // Initialize the response array
         $response = array();
@@ -40,9 +46,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     // Close the database connection
     mysqli_close($connection);
-} else {
-    // If the request method is not GET
-    http_response_code(405); // Method Not Allowed
-    echo json_encode(array('status' => 'fail', 'msg' => 'Invalid request method.'));
-}
-?>
+

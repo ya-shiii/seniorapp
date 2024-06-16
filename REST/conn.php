@@ -1,6 +1,6 @@
 <?php
 // Database connection details
-$servername = "localhost";
+$servername = "localhost"; //srv1457.hstgr.io
 $username = "root"; //u663034616_alvaradoken29
 $password = ""; //Kshmrken123
 $dbname = "senior_app"; //u663034616_senior_app

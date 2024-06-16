@@ -11,6 +11,7 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 </head>
 
 <body>
@@ -40,7 +41,7 @@
           <a class="nav-link" href="account.html">Account Management</a>
         </li>
         <li class="nav-item">
-          <a href="../REST/logout.php" class="btn btn-danger h-full">Logout</a>
+          <a href="../" class="btn btn-danger h-full">Logout</a>
         </li>
       </ul>
     </div>
@@ -267,7 +268,7 @@
           </div>
           <div class="form-group">
             <label for="adddate">Appointment Date:</label><br>
-            <input class="form-control" type="date" id="adddate" name="adddate" placeholder="Date" min="1" required>
+            <input class="form-control" type="date" id="adddate" name="adddate" placeholder="Date" required>
           </div>
           <div class="form-group">
             <label for="addapptime">Time:</label>
@@ -310,8 +311,15 @@
     });
 
     function fetchappointments() {
-      fetch('../REST/fetch-appointments-staff', {
-        method: 'GET'
+      // Retrieve the fullname from cookie
+      const brgy = Cookies.get('brgy');
+
+
+      fetch(`../REST/fetch-appointments-staff?brgy=${encodeURIComponent(brgy)}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
         .then(response => {
           if (!response.ok) {
@@ -331,22 +339,18 @@
               switch (appointment.status) {
                 case 'pending':
                   buttons = `
-                <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>
                 <button class="w-75 mb-1 btn btn-success btnConfirm" onclick="confirmAppointment('${appointment.appointment_id}')">Confirm</button>
                 <button class="w-75 mb-1 btn btn-warning btnCancel" onclick="cancelAppointment('${appointment.appointment_id}')">Cancel</button>`;
                   break;
                 case 'confirm':
                   buttons = `
-                <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>
                 <button class="w-75 mb-1 btn btn-primary btnComplete" onclick="completeAppointment('${appointment.appointment_id}')">Complete</button>`;
                   break;
                 case 'cancel':
-                  buttons = `
-                <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>`;
+
                   break;
                 case 'complete':
-                  buttons = `
-                <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>`;
+
                   break;
                 default:
                   buttons = '';
@@ -384,12 +388,17 @@
 
     // Save the appointment
     $('#addSave').click(function () {
+      const session_id = Cookies.get('session_id');
+      const fullname = Cookies.get('fullname');
+
       var Barangay = $('#addBarangay').val();
       var Appointment_date = $('#adddate').val();
       var Appointment_time = $('#addapptime').val();
 
       var requestData = {
         Barangay: Barangay,
+        session_id: session_id,
+        fullname: fullname,
         Appointment_date: Appointment_date,
         Appointment_time: Appointment_time
       };
@@ -445,45 +454,31 @@
 
 
   });
-
+  // Function to retrieve cookie value by name
+  function getCookie(name) {
+    return Cookies.get(name);
+  }
+  // Function to check user type from cookies
   function checkUsertype() {
-    $.ajax({
-      url: '../REST/check-usertype',
-      method: 'GET',
-      dataType: 'json',
-      success: function (response) {
-        if (response.usertype === 'staff') {
-          // Usertype is valid, you can add further logic here if needed
-          console.log('Usertype:', response.usertype);
-          console.log('Usertype:', response.brgy);
-        } else {
-          // Invalid usertype or status not success
-          Swal.fire({
-            title: "Unauthorized",
-            text: "You are not authorized to view this page. Logging out...",
-            icon: "error",
-            timer: 3000,
-            timerProgressBar: true,
-            didClose: () => {
-              window.location.href = '../REST/logout'; // Redirect to logout
-            }
-          });
+    // Get the usertype cookie
+    const usertype = getCookie('usertype');
+
+    if (usertype === 'staff') {
+      // Usertype is valid, you can add further logic here if needed
+      console.log('Usertype:', usertype);
+    } else {
+      // Invalid usertype or usertype not found
+      Swal.fire({
+        title: "Unauthorized",
+        text: "You are not authorized to view this page. Logging out...",
+        icon: "error",
+        timer: 3000,
+        timerProgressBar: true,
+        didClose: () => {
+          window.location.href = '../REST/logout'; // Redirect to logout
         }
-      },
-      error: function () {
-        // Handle error
-        Swal.fire({
-          title: "Error",
-          text: "Failed to verify user. Logging out...",
-          icon: "error",
-          timer: 3000,
-          timerProgressBar: true,
-          didClose: () => {
-            window.location.href = '../REST/logout'; // Redirect to logout
-          }
-        });
-      }
-    });
+      });
+    }
   }
 
   // Call the function to check usertype on page load
@@ -622,6 +617,14 @@
   }
 
 </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById('adddate').setAttribute('min', today);
+  });
+</script>
+
 
 
 </body>

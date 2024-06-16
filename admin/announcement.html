@@ -11,6 +11,7 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 </head>
 
 <body>
@@ -40,7 +41,7 @@
           <a class="nav-link" href="staff.html">Staff</a>
         </li>
         <li class="nav-item">
-          <a href="../REST/logout.php" class="btn btn-danger h-full">Logout</a>
+          <a href="../" class="btn btn-danger h-full">Logout</a>
         </li>
       </ul>
     </div>
@@ -282,8 +283,7 @@
 </div>
 
 
-<div id="wait"
-  style="display:none;width:69px;height:89px;position:absolute;top:50%;left:50%;padding:2px;">
+<div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:50%;padding:2px;">
   <img src='img/demo_wait.gif' width="64" height="64" /><br>Loading..
 </div>
 
@@ -489,46 +489,32 @@
       });
     };
   });
-
-  function checkUsertype() {
-    $.ajax({
-      url: '../REST/check-usertype',
-      method: 'GET',
-      dataType: 'json',
-      success: function (response) {
-        if (response.usertype === 'admin') {
-          // Usertype is valid, you can add further logic here if needed
-          console.log('Usertype:', response.usertype);
-        } else {
-          // Invalid usertype or status not success
-          Swal.fire({
-            title: "Unauthorized",
-            text: "You are not authorized to view this page. Logging out...",
-            icon: "error",
-            timer: 3000,
-            timerProgressBar: true,
-            didClose: () => {
-              window.location.href = '../REST/logout'; // Redirect to logout
-            }
-          });
-        }
-      },
-      error: function () {
-        // Handle error
-        Swal.fire({
-          title: "Error",
-          text: "Failed to verify user. Logging out...",
-          icon: "error",
-          timer: 3000,
-          timerProgressBar: true,
-          didClose: () => {
-            window.location.href = '../REST/logout'; // Redirect to logout
-          }
-        });
-      }
-    });
+  // Function to retrieve cookie value by name
+  function getCookie(name) {
+    return Cookies.get(name);
   }
+  // Function to check user type from cookies
+  function checkUsertype() {
+    // Get the usertype cookie
+    const usertype = getCookie('usertype');
 
+    if (usertype === 'admin') {
+      // Usertype is valid, you can add further logic here if needed
+      console.log('Usertype:', usertype);
+    } else {
+      // Invalid usertype or usertype not found
+      Swal.fire({
+        title: "Unauthorized",
+        text: "You are not authorized to view this page. Logging out...",
+        icon: "error",
+        timer: 3000,
+        timerProgressBar: true,
+        didClose: () => {
+          window.location.href = '../REST/logout'; // Redirect to logout
+        }
+      });
+    }
+  }
   // Call the function to check usertype on page load
   $(document).ready(function () {
     checkUsertype();

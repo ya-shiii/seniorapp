@@ -1,4 +1,13 @@
 <?php
+// Allow CORS
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Handle preflight requests (OPTIONS)
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    exit(0);
+}
 session_start();
 include 'conn.php';
 
@@ -7,8 +16,8 @@ header('Content-Type: application/json');
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
-$session_id = $_SESSION['session_id'];
-$fullname = $_SESSION['fullname'];
+$session_id = $data['session_id'];
+$fullname = $data['fullname'];
 $brgy = $data['Barangay'];
 $appointment_date = $data['Appointment_date'];
 $time = $data['Appointment_time'];

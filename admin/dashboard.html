@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>SCMS</title>
   <meta charset="utf-8">
@@ -11,27 +12,76 @@
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
   <script src="js/sweetalert2@11.js"></script>
-    <style>
-  .card {
-     transition: transform 0.3s;
-   }
- 
-   .card:hover {
-     transform: scale(1.05);
-   }
- 
-   .card-title {
-     font-size: 1.5rem;
-   }
- 
-   .card-body {
-     display: flex;
-     flex-direction: column;
-     justify-content: space-between;
-   }
- 
- </style>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+  <style>
+    .card {
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .birthday-card {
+      background-color: #ffff;
+      border: 1px solid #b2d4ef;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .birthday-card .card-title {
+      font-size: 1.8rem;
+      color: black;
+    }
+
+    .birthday-card .list-group-item {
+      background-color: #d9edf7;
+      border: none;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      color: black;
+    }
+
+    .birthday-card .list-group-item:hover {
+      background-color: #b2d4ef;
+    }
+
+    .birthday-card .list-group-item strong {
+      color: black;
+    }
+
+    .navbar-brand img {
+      width: 50px;
+    }
+
+    .navbar-nav .nav-link.active {
+      font-weight: bold;
+    }
+
+    .list-group-numbered {
+      counter-reset: list-group-number;
+    }
+
+    .list-group-numbered>.list-group-item::before {
+      counter-increment: list-group-number;
+      content: counter(list-group-number) ". ";
+      font-weight: bold;
+      color: black;
+    }
+  </style>
 </head>
+
 <body>
 
   <nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -59,7 +109,7 @@
           <a class="nav-link" href="staff.html">Staff</a>
         </li>
         <li class="nav-item">
-          <a href="../REST/logout.php" class="btn btn-danger h-full">Logout</a>
+          <a href="../" class="btn btn-danger h-full">Logout</a>
         </li>
       </ul>
     </div>
@@ -69,7 +119,7 @@
   <div class="container">
     <div class="jumbotron">
       <h3>Dashboard</h3>
-      <p>Welcome to Senior Citizen Management System</p>
+      <p id="welcome-message">Welcome to Senior Citizen Management System</p>
     </div>
 
     <div class="row">
@@ -101,59 +151,47 @@
         </div>
       </div>
     </div>
-    
+
     <div class="row">
       <div class="col-md-12">
-        <div class="card mb-4">
+        <div class="card birthday-card">
           <div class="card-body">
             <h5 class="card-title">Birthdays This Month</h5>
-            <ul id="birthday-list" class="list-group"></ul>
+            <ul id="birthday-list" class="list-group list-group-numbered"></ul>
           </div>
         </div>
       </div>
     </div>
   </div>
+  </br>
 
   <script>
-    function checkUsertype() {
-      $.ajax({
-        url: '../REST/check-usertype',
-        method: 'GET',
-        dataType: 'json',
-        success: function (response) {
-          if (response.usertype === 'admin') {
-            // Usertype is valid, you can add further logic here if needed
-            console.log('Usertype:', response.usertype);
-          } else {
-            // Invalid usertype or status not success
-            Swal.fire({
-              title: "Unauthorized",
-              text: "You are not authorized to view this page. Logging out...",
-              icon: "error",
-              timer: 3000,
-              timerProgressBar: true,
-              didClose: () => {
-                window.location.href = '../REST/logout'; // Redirect to logout
-              }
-            });
-          }
-        },
-        error: function () {
-          // Handle error
-          Swal.fire({
-            title: "Error",
-            text: "Failed to verify user. Logging out...",
-            icon: "error",
-            timer: 3000,
-            timerProgressBar: true,
-            didClose: () => {
-              window.location.href = '../REST/logout'; // Redirect to logout
-            }
-          });
-        }
-      });
+    // Function to retrieve cookie value by name
+    function getCookie(name) {
+      return Cookies.get(name);
     }
+    // Function to check user type from cookies
+    function checkUsertype() {
+      // Get the usertype cookie
+      const usertype = getCookie('usertype');
 
+      if (usertype === 'admin') {
+        // Usertype is valid, you can add further logic here if needed
+        console.log('Usertype:', usertype);
+      } else {
+        // Invalid usertype or usertype not found
+        Swal.fire({
+          title: "Unauthorized",
+          text: "You are not authorized to view this page. Logging out...",
+          icon: "error",
+          timer: 3000,
+          timerProgressBar: true,
+          didClose: () => {
+            window.location.href = '../REST/logout'; // Redirect to logout
+          }
+        });
+      }
+    }
     function fetchBirthdays() {
       $.ajax({
         url: '../REST/getBirthdays',
@@ -169,7 +207,7 @@
             birthdayList.append('<li class="list-group-item">' + response.message + '</li>');
           } else {
             $.each(response, function (index, birthday) {
-              birthdayList.append('<li class="list-group-item">' + birthday.fullname + ' - ' + birthday.dob + '</li>');
+              birthdayList.append('<li class="list-group-item"><strong>Name: </strong>' + birthday.fullname + ' <strong>Date of Birth: </strong>' + birthday.dob + ' <strong>Age: </strong>' + birthday.age + '</li>');
             });
           }
         },
@@ -188,4 +226,5 @@
     });
   </script>
 </body>
+
 </html>

@@ -11,6 +11,7 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 </head>
 
 <body>
@@ -40,7 +41,7 @@
           <a class="nav-link" href="staff.html">Staff</a>
         </li>
         <li class="nav-item">
-          <a href="../REST/logout.php" class="btn btn-danger h-full">Logout</a>
+          <a href="../" class="btn btn-danger h-full">Logout</a>
         </li>
       </ul>
     </div>
@@ -281,7 +282,7 @@
                 if (seniorcitizen.status === 'pending') {
                   actionButtons = actionButtons2;
                 }
-            
+
                 const row = `<tr class='data'>
                     <td><img src="${seniorcitizen.image}?${new Date().getTime()}" class="img-fluid" style="max-width: 100px; max-height: 100px;" alt="seniorcitizen Image"></td>
                     <td>${seniorcitizen.seniorcode}</td>
@@ -592,28 +593,42 @@
       });
 
       window.deleteseniorcitizen = function (seniorcode) {
-        console.log('Deleting account with ID:', seniorcode);
-        $.ajax({
-          url: '../REST/delete-senior',
-          method: 'DELETE',
-          contentType: 'application/json',
-          data: JSON.stringify({ seniorcode: seniorcode }),
-          success: function (result) {
-            console.log('Delete request successful:', result);
-            Swal.fire({
-              title: "Delete Account",
-              text: result.msg,
-              icon: "success"
-            }).then(() => {
-              fetchseniorcitizens();
-            });
-          },
-          error: function (result, jqXHR, textStatus, errorThrown) {
-            console.error('Error deleting account');
-            Swal.fire({
-              title: "Delete Account",
-              text: "Failed to delete account",
-              icon: "error"
+        // Show confirmation dialog
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'You are about to delete this senior citizen account. This action cannot be undone.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            console.log('Deleting account with ID:', seniorcode);
+            // Proceed with deletion
+            $.ajax({
+              url: '../REST/delete-senior',
+              method: 'DELETE',
+              contentType: 'application/json',
+              data: JSON.stringify({ seniorcode: seniorcode }),
+              success: function (result) {
+                console.log('Delete request successful:', result);
+                Swal.fire({
+                  title: 'Delete Account',
+                  text: result.msg,
+                  icon: 'success'
+                }).then(() => {
+                  fetchseniorcitizens(); // Refresh senior citizens list
+                });
+              },
+              error: function (result, jqXHR, textStatus, errorThrown) {
+                console.error('Error deleting account');
+                Swal.fire({
+                  title: 'Delete Account',
+                  text: 'Failed to delete account',
+                  icon: 'error'
+                });
+              }
             });
           }
         });
@@ -651,90 +666,76 @@
 
 
   <script>
-     $(document).ready(function () {
-    $('#adddob').change(function () {
-      var dob = $(this).val();
-      var age = calculateage(dob);
-      if (age >= 60) {
-        $('#addage').val(age);
-      } else {
-        showError();
-        $('#adddob').val('');
-        $('#addage').val('');
-      }
-    });
-
-    $('#dob').change(function () {
-      var dob = $(this).val();
-      var age = calculateage(dob);
-      if (age >= 60) {
-        $('#age').val(age);
-      } else {
-        showError();
-        $('#dob').val('');
-        $('#age').val('');
-      }
-    });
-
-    function calculateage(dob) {
-      var today = new Date();
-      var birthDate = new Date(dob);
-      var age = today.getFullYear() - birthDate.getFullYear();
-      var monthDiff = today.getMonth() - birthDate.getMonth();
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-      return age;
-    }
-
-    function showError() {
-      Swal.fire({
-        title: "Error age",
-        text: "Age must be 60 above",
-        icon: "error"
-      });
-    }
-  });
-
-    function checkUsertype() {
-      $.ajax({
-        url: '../REST/check-usertype',
-        method: 'GET',
-        dataType: 'json',
-        success: function (response) {
-          if (response.usertype === 'admin') {
-            // Usertype is valid, you can add further logic here if needed
-            console.log('Usertype:', response.usertype);
-          } else {
-            // Invalid usertype or status not success
-            Swal.fire({
-              title: "Unauthorized",
-              text: "You are not authorized to view this page. Logging out...",
-              icon: "error",
-              timer: 3000,
-              timerProgressBar: true,
-              didClose: () => {
-                window.location.href = '../REST/logout'; // Redirect to logout
-              }
-            });
-          }
-        },
-        error: function () {
-          // Handle error
-          Swal.fire({
-            title: "Error",
-            text: "Failed to verify user. Logging out...",
-            icon: "error",
-            timer: 3000,
-            timerProgressBar: true,
-            didClose: () => {
-              window.location.href = '../REST/logout'; // Redirect to logout
-            }
-          });
+    $(document).ready(function () {
+      $('#adddob').change(function () {
+        var dob = $(this).val();
+        var age = calculateage(dob);
+        if (age >= 60) {
+          $('#addage').val(age);
+        } else {
+          showError();
+          $('#adddob').val('');
+          $('#addage').val('');
         }
       });
-    }
 
+      $('#dob').change(function () {
+        var dob = $(this).val();
+        var age = calculateage(dob);
+        if (age >= 60) {
+          $('#age').val(age);
+        } else {
+          showError();
+          $('#dob').val('');
+          $('#age').val('');
+        }
+      });
+
+      function calculateage(dob) {
+        var today = new Date();
+        var birthDate = new Date(dob);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        return age;
+      }
+
+      function showError() {
+        Swal.fire({
+          title: "Error age",
+          text: "Age must be 60 above",
+          icon: "error"
+        });
+      }
+    });
+    // Function to retrieve cookie value by name
+    function getCookie(name) {
+      return Cookies.get(name);
+    }
+    // Function to check user type from cookies
+    function checkUsertype() {
+      // Get the usertype cookie
+      const usertype = getCookie('usertype');
+
+      if (usertype === 'admin') {
+        // Usertype is valid, you can add further logic here if needed
+        console.log('Usertype:', usertype);
+      } else {
+        // Invalid usertype or usertype not found
+        Swal.fire({
+          title: "Unauthorized",
+          text: "You are not authorized to view this page. Logging out...",
+          icon: "error",
+          timer: 3000,
+          timerProgressBar: true,
+          didClose: () => {
+            window.location.href = '../REST/logout'; // Redirect to logout
+          }
+        });
+      }
+    }
     // Call the function to check usertype on page load
     $(document).ready(function () {
       checkUsertype();

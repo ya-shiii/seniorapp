@@ -1,7 +1,15 @@
 <?php
+// Allow CORS
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Handle preflight requests (OPTIONS)
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    exit(0);
+}
 // Include the database connection file
 include 'conn.php';
-session_start();
 
 // Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -34,15 +42,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($password === $user['password']) { // Compare plain text password
                     // If password matches, set usertype as 'user'
                     
-                    $_SESSION['username'] = $user['username'];
-                    $_SESSION['session_id'] = $user['seniorcode'];
-                    $_SESSION['usertype'] = 'senior';
-                    $_SESSION['fullname'] = $user['fullname'];
-                    
+                
                     $response = array(
                         'status' => 'success',
+                        'session_id' => $user['seniorcode'],
                         'username' => $user['username'],
-                        'usertype' => 'user',
+                        'usertype' => 'senior',
+                        'brgy' => $user['address'],
                         'fullname' => $user['fullname']
                     );
                 } else {
@@ -61,16 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($password === $user['password']) { // Compare plain text password
                     // If password matches, use usertype from tblstaff
 
-                    $_SESSION['username'] = $user['username'];
-                    $_SESSION['session_id'] = $user['staffid'];
-                    $_SESSION['usertype'] = $user['usertype'];
-                    $_SESSION['fullname'] = $user['fullname'];
-                    $_SESSION['brgy'] = $user['brgy'];
+
 
                     $response = array(
                         'status' => 'success',
+                        'session_id' => $user['staffid'],
                         'username' => $user['username'],
                         'usertype' => $user['usertype'],
+                        'brgy' => $user['brgy'],
                         'fullname' => $user['fullname']
                     );
                 } else {

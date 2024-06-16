@@ -10,6 +10,16 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+
+  <style>
+    body {
+      background-color: #e6f7ff;
+      /* Light pastel blue */
+      font-family: Arial, sans-serif;
+    }
+  </style>
+
 </head>
 
 <body>
@@ -36,7 +46,7 @@
           <a class="nav-link" href="view_record.html">Personal Record</a>
         </li>
         <li class="nav-item">
-          <a href="../REST/logout.php" class="btn btn-danger h-full">Logout</a>
+          <a href="../" class="btn btn-danger h-full">Logout</a>
         </li>
       </ul>
     </div>
@@ -88,11 +98,10 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
+        <form id="editForm" enctype="multipart/form-data">
           <div class="form-group">
             <label for="Barangay">Barangay:</label>
-            <select style="text-transform: uppercase" class="form-control col-lg-12 col-md-12" id="Barangay"
-              name="Barangay" placeholder="Barangay">
+            <select class="form-control" id="editBarangay" name="Barangay" placeholder="Barangay" readonly>
               <option value="">Choose Barangay</option>
               <option value="Aguada">Aguada</option>
               <option value="Bacolod">Bacolod</option>
@@ -148,19 +157,26 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="Announcement_title">Announcement Title:</label>
-            <input type="text" class="form-control" id="Announcement_title" name="Announcement_title"
-              placeholder="Announcement Title">
+            <label for="editdate">Appointment Date:</label><br>
+            <input class="form-control" type="date" id="editdate" name="editdate" placeholder="Date" required>
           </div>
           <div class="form-group">
-            <label for="Announcement_description">Announcement Description:</label>
-            <input type="text" class="form-control" id="Announcement_description" name="Announcement_description"
-              placeholder="Announcement Description">
+            <label for="editapptime">Time:</label>
+            <select class="form-control" id="editapptime" name="editapptime" placeholder="Appointment Time" required>
+              <option value="">Select Time</option>
+              <option value="8:00 AM">8:00 AM</option>
+              <option value="9:00 AM">9:00 AM</option>
+              <option value="10:00 AM">10:00 AM</option>
+              <option value="11:00 AM">11:00 AM</option>
+              <option value="1:00 PM">1:00 PM</option>
+              <option value="2:00 PM">2:00 PM</option>
+              <option value="3:00 PM">3:00 PM</option>
+            </select>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" id="save" class="btn btn-primary">Save</button>
+        <button type="button" id="saveedit" class="btn btn-primary">Save</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
       </div>
     </div>
@@ -172,7 +188,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="viewModalLabel">View Account</h5>
+        <h5 class="modal-title" id="viewModalLabel">View Appointment</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -263,7 +279,7 @@
           </div>
           <div class="form-group">
             <label for="adddate">Appointment Date:</label><br>
-            <input class="form-control" type="date" id="adddate" name="adddate" placeholder="Date" min="1" required>
+            <input class="form-control" type="date" id="adddate" name="adddate" placeholder="Date" required>
           </div>
           <div class="form-group">
             <label for="addapptime">Time:</label>
@@ -305,70 +321,6 @@
       $("#wait").css("display", "none");
     });
 
-    function fetchappointments() {
-      fetch('../REST/fetch-appointments-senior', {
-        method: 'GET'
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          const displayTableBody = document.querySelector('#display tbody');
-          displayTableBody.innerHTML = '';
-          if (data.length === 0 || (data.length === 1 && data[0].msg === "No Information found!")) {
-            displayTableBody.innerHTML = '<tr><td colspan="8">No information found</td></tr>';
-          } else {
-            data.forEach(appointment => {
-              let buttons = '';
-
-              switch (appointment.status) {
-                case 'pending':
-                  buttons = `
-                <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>
-                <button class="w-75 mb-1 btn btn-warning btnCancel" onclick="cancelAppointment('${appointment.appointment_id}')">Cancel</button>`;
-                  break;
-                case 'confirm':
-                  buttons = `
-                <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>
-                <button class="w-75 mb-1 btn btn-warning btnCancel" onclick="cancelAppointment('${appointment.appointment_id}')">Cancel</button>`;
-                  break;
-                case 'cancel':
-                  buttons = `
-                <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>`;
-                  break;
-                case 'complete':
-                  buttons = `
-                <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>`;
-                  break;
-                default:
-                  buttons = '';
-              }
-
-              const row = `<tr class='data'>
-                        <td>${appointment.appointment_id}</td>
-                        <td>${appointment.senior_code}</td>
-                        <td>${appointment.fullname}</td>
-                        <td>${appointment.brgy}</td>
-                        <td>${appointment.appointment_date}</td>
-                        <td>${appointment.time}</td>
-                        <td>${appointment.status}</td>
-                        <td>${buttons}</td>
-                    </tr>`;
-              displayTableBody.innerHTML += row;
-            });
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-          const displayTableBody = document.querySelector('#display tbody');
-          displayTableBody.innerHTML = '<tr><td colspan="8">No information found</td></tr>';
-        });
-    }
-    fetchappointments();
-
 
     $("#search").on("keyup", function () {
       var value = $(this).val().toLowerCase();
@@ -379,11 +331,16 @@
 
     // Save the appointment
     $('#addSave').click(function () {
+      // Retrieve the fullname from cookie
+      const session_id = Cookies.get('session_id');
+      const fullname = Cookies.get('fullname');
       var Barangay = $('#addBarangay').val();
       var Appointment_date = $('#adddate').val();
       var Appointment_time = $('#addapptime').val();
 
       var requestData = {
+        session_id: session_id,
+        fullname: fullname,
         Barangay: Barangay,
         Appointment_date: Appointment_date,
         Appointment_time: Appointment_time
@@ -406,7 +363,7 @@
           }).then(() => {
             if (result.status === 'success') {
               $('#addModal').modal('hide');
-              fetchappointments();
+              location.reload();
             }
           });
         },
@@ -438,52 +395,161 @@
       $('#viewModal').modal('show');
     });
 
+    $(document).on('click', '.btnResched', function () {
+
+      var currentRow = $(this).closest("tr");
+      var appointmentId = currentRow.find("td:eq(0)").text();
+      var barangay = currentRow.find("td:eq(3)").text();
+      var appointmentDate = currentRow.find("td:eq(4)").text();
+      var appointmentTime = currentRow.find("td:eq(5)").text();
+
+      // Populate the modal form with the appointment details
+      $('#editBarangay').val(barangay);
+      $('#editdate').val(appointmentDate);
+      $('#editapptime').val(appointmentTime);
+
+      // Set the appointment ID as a data attribute on the save button for later use
+      $('#saveedit').data('appointment-id', appointmentId);
+
+      // Open the modal
+      $('#editModal').modal('show');
+    });
+
+    $('#saveedit').on('click', function () {
+      // Retrieve the appointment ID
+      const appointmentId = $(this).data('appointment-id');
+
+      // Gather form data
+      var formData = {
+        appointment_id: appointmentId,
+        barangay: $('#editBarangay').val(),
+        appointment_date: $('#editdate').val(),
+        appointment_time: $('#editapptime').val()
+      };
+
+      console.log(formData);
+
+      // Send the updated appointment details to the server
+      $.ajax({
+        url: '../REST/update_appointment', // Replace with your API endpoint
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function (response) {
+          alert('Appointment updated successfully.');
+          $('#editModal').modal('hide');
+          location.reload(); // Reload the page to reflect changes, or update the table dynamically
+        },
+        error: function (xhr, status, error) {
+          alert('Error: ' + xhr.responseText);
+        }
+      });
+    });
+
+    function fetchAppointments() {
+      // Retrieve the fullname from cookie
+      const fullname = Cookies.get('fullname');
+
+      fetch(`../REST/fetch-appointments-senior?fullname=${encodeURIComponent(fullname)}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          const displayTableBody = document.querySelector('#display tbody');
+          displayTableBody.innerHTML = '';
+          if (data.length === 0 || (data.length === 1 && data[0].msg === "No Information found!")) {
+            displayTableBody.innerHTML = '<tr><td colspan="8">No information found</td></tr>';
+          } else {
+            data.forEach(appointment => {
+              let buttons = '';
+
+              switch (appointment.status) {
+                case 'pending':
+                  buttons = `
+                            <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>
+                            <button class="w-75 mb-1 btn btn-primary btnResched")">Reschedule</button>
+                            <button class="w-75 mb-1 btn btn-warning" onclick="cancelAppointment('${appointment.appointment_id}')">Cancel</button>`;
+                  break;
+                case 'confirm':
+                  buttons = `
+                            <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>
+                            <button class="w-75 mb-1 btn btn-warning" onclick="cancelAppointment('${appointment.appointment_id}')">Cancel</button>`;
+                  break;
+                case 'cancel':
+                  buttons = `
+                            <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>`;
+                  break;
+                case 'complete':
+                  buttons = `
+                            <button class="w-75 mb-1 btn btn-info btnView text-center" >View</button>`;
+                  break;
+                default:
+                  buttons = '';
+              }
+
+              const row = `<tr class='data'>
+                    <td>${appointment.appointment_id}</td>
+                    <td>${appointment.senior_code}</td>
+                    <td>${appointment.fullname}</td>
+                    <td>${appointment.brgy}</td>
+                    <td>${appointment.appointment_date}</td>
+                    <td>${appointment.time}</td>
+                    <td>${appointment.status}</td>
+                    <td>${buttons}</td>
+                </tr>`;
+              displayTableBody.innerHTML += row;
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          const displayTableBody = document.querySelector('#display tbody');
+          displayTableBody.innerHTML = '<tr><td colspan="8">No information found</td></tr>';
+        });
+    }
+
+
+    fetchAppointments();
 
   });
-
-  function checkUsertype() {
-    $.ajax({
-      url: '../REST/check-usertype',
-      method: 'GET',
-      dataType: 'json',
-      success: function (response) {
-        if (response.usertype === 'senior') {
-          // Usertype is valid, you can add further logic here if needed
-          console.log('Usertype:', response.usertype);
-        } else {
-          // Invalid usertype or status not success
-          Swal.fire({
-            title: "Unauthorized",
-            text: "You are not authorized to view this page. Logging out...",
-            icon: "error",
-            timer: 3000,
-            timerProgressBar: true,
-            didClose: () => {
-              window.location.href = '../REST/logout'; // Redirect to logout
-            }
-          });
-        }
-      },
-      error: function () {
-        // Handle error
-        Swal.fire({
-          title: "Error",
-          text: "Failed to verify user. Logging out...",
-          icon: "error",
-          timer: 3000,
-          timerProgressBar: true,
-          didClose: () => {
-            window.location.href = '../REST/logout'; // Redirect to logout
-          }
-        });
-      }
-    });
+  // Function to retrieve cookie value by name
+  function getCookie(name) {
+    return Cookies.get(name);
   }
 
-  // Call the function to check usertype on page load
-  $(document).ready(function () {
-    checkUsertype();
-  });
+  // Function to check user type from cookies
+  function checkUsertype() {
+    // Get the usertype cookie
+    const usertype = getCookie('usertype');
+
+    if (usertype === 'senior') {
+      // Usertype is valid, you can add further logic here if needed
+      console.log('Usertype:', usertype);
+    } else {
+      // Invalid usertype or usertype not found
+      Swal.fire({
+        title: "Unauthorized",
+        text: "You are not authorized to view this page. Logging out...",
+        icon: "error",
+        timer: 3000,
+        timerProgressBar: true,
+        didClose: () => {
+          window.location.href = '../REST/logout'; // Redirect to logout
+        }
+      });
+    }
+  }
+
+  // Call the function to check usertype
+  checkUsertype();
 
   document.getElementById('adddate').addEventListener('input', function (e) {
     var day = new Date(this.value).getUTCDay();
@@ -617,7 +683,14 @@
 
 </script>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById('adddate').setAttribute('min', today);
+  });
 
+
+</script>
 </body>
 
 </html>

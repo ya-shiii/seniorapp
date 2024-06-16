@@ -1,4 +1,13 @@
 <?php
+// Allow CORS
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Handle preflight requests (OPTIONS)
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    exit(0);
+}
 // Include database connection
 include 'conn.php';
 
@@ -28,7 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             while ($row = $result->fetch_assoc()) {
                 $birthday = array(
                     'fullname' => $row['fullname'],
-                    'dob' => $row['dob']
+                    'dob' => $row['dob'],
+                    'age' => $row['age']
+
                 );
                 $birthdays[] = $birthday;
             }

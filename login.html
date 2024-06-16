@@ -29,11 +29,16 @@
         }
 
         .header {
-            font-size: 2.5rem; /* Increased font size */
-            font-weight: bold; /* Bold font weight */
-            color: #000000; /* Set color */
-            text-align: center; /* Center alignment */
-            margin-bottom: 30px; /* added margin-bottom */
+            font-size: 2.5rem;
+            /* Increased font size */
+            font-weight: bold;
+            /* Bold font weight */
+            color: #000000;
+            /* Set color */
+            text-align: center;
+            /* Center alignment */
+            margin-bottom: 30px;
+            /* added margin-bottom */
         }
 
         .wrapper {
@@ -61,16 +66,16 @@
                 8px 8px 15px #a7aaa7,
                 -8px -8px 15px #fff;
         }
-        
-.footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: rgb(36, 36, 36);
-    color: rgb(71, 248, 145);
-    text-align: center;
-    padding: 20px 0;
-}
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: rgb(36, 36, 36);
+            color: rgb(71, 248, 145);
+            text-align: center;
+            padding: 20px 0;
+        }
 
 
         .wrapper .name {
@@ -79,7 +84,8 @@
             letter-spacing: 1.3px;
             padding-left: 10px;
             color: #555;
-            margin-bottom: 20px; /* added margin-bottom */
+            margin-bottom: 20px;
+            /* added margin-bottom */
         }
 
         .wrapper .form-field input {
@@ -167,44 +173,61 @@
 
     <script>
         $(document).ready(function () {
-            // Login form
+            // Login form submission handling
             $('#loginForm').on('submit', function (e) {
                 e.preventDefault();
-    
+
                 const username = $('#uname').val();
                 const password = $('#pass').val();
-    
+
                 $.ajax({
                     url: 'REST/login',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({ username: username, password: password }),
-    
+
                     success: function (response) {
-                        console.log(response); // Add logging to the console for debugging
+                        console.log(response); // Logging response for debugging
+
                         if (response.status === 'fail') {
+                            // Show error message on login failure
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Login failed',
-                                text: response.msg
+                                text: response.msg,
+                                timer: 1500,
+                                didClose: () => {
+                                    location.reload(); // Refresh the page
+                                }
                             });
                         } else {
+                            // Extract necessary data from response
+                            
+                            const session_id = response.session_id;
                             const uname = response.username;
                             const utype = response.usertype;
-    
+                            const brgy = response.brgy;
+                            const fullname = response.fullname;
+
+                            // Set cookies with appropriate paths based on usertype
+                            Cookies.set('session_id', session_id, { expires: 1, path: '/' });
                             Cookies.set('username', uname, { expires: 1, path: '/' });
                             Cookies.set('usertype', utype, { expires: 1, path: '/' });
-    
+                            Cookies.set('brgy', brgy, { expires: 1, path: '/' });
+                            Cookies.set('fullname', fullname, { expires: 1, path: '/' });
+
+                            // Determine redirect URL based on usertype
                             let redirectUrl = '';
-    
+
                             if (utype === 'admin') {
                                 redirectUrl = 'admin/dashboard.html';
                             } else if (utype === 'staff') {
                                 redirectUrl = 'staff/dashboard.html';
-                            } else if (utype === 'user') {
+                            } else if (utype === 'senior') {
                                 redirectUrl = 'senior/dashboard.html';
                             }
-    
+
+                            // Show success message and redirect after a short delay
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Login successful',
@@ -212,7 +235,7 @@
                                 showConfirmButton: false,
                                 timer: 1500
                             }).then(() => {
-                                // Redirect to the appropriate page
+                                // Redirect to the appropriate dashboard
                                 window.location.href = redirectUrl;
                             });
                         }
@@ -228,9 +251,10 @@
                 });
             });
         });
+
     </script>
-    
-  
+
+
 </body>
 
 </html>

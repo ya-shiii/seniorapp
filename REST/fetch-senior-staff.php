@@ -1,11 +1,21 @@
 <?php
+// Allow CORS
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Handle preflight requests (OPTIONS)
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    exit(0);
+}
 // Include the database connection file
 include 'conn.php';
 
 // Check if the request method is GET
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $brgy = $_GET['brgy'];
     // Query to fetch all staffs
-    $query = "SELECT * FROM tblsenior";
+    $query = "SELECT * FROM tblsenior WHERE `address` = '$brgy'";
 
     // Execute the query
     $result = mysqli_query($connection, $query);

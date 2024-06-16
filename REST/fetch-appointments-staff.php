@@ -1,10 +1,18 @@
 <?php
+// Allow CORS
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Handle preflight requests (OPTIONS)
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    exit(0);
+}
 include 'conn.php';
-session_start();
-$brgy = $_SESSION['brgy'];
+$brgy = $_GET['brgy'];
 
 
-$sql = "SELECT * FROM tblappointment WHERE brgy  ='$brgy' ORDER BY appointment_date ASC";
+$sql = "SELECT * FROM tblappointment WHERE brgy='$brgy' ORDER BY appointment_date ASC";
 $result = mysqli_query($connection, $sql);
 
 $appointments = array();

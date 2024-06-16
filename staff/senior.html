@@ -11,13 +11,14 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 </head>
 
 <body>
 
   <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <a class="navbar-brand" href="#">
-      <img src="img/senior.png" alt="logo" style="width:50px;"> SCMS    </a>
+      <img src="img/senior.png" alt="logo" style="width:50px;"> SCMS </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -39,7 +40,7 @@
           <a class="nav-link" href="account.html">Account Management</a>
         </li>
         <li class="nav-item">
-          <a href="../REST/logout.php" class="btn btn-danger h-full">Logout</a>
+          <a href="../" class="btn btn-danger h-full">Logout</a>
         </li>
       </ul>
     </div>
@@ -52,7 +53,8 @@
     <input id="search" class="form-control col-lg-3 col-md-4" type="text" placeholder="Search..">
     <br />
     <div class="d-flex justify-content-between mb-3">
-      <button class="btn btn-success" data-toggle="modal" data-target="#addModal">Add New Senior Citzen Record</button>
+      <button class="btn btn-success btnAdd" data-toggle="modal" data-target="#addModal">Add New Senior Citzen
+        Record</button>
     </div>
 
     <br />
@@ -182,7 +184,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addModalLabel">Add Account</h5>
+          <h5 class="modal-title" id="addModalLabel">Add Senior Account</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -203,7 +205,7 @@
             </div>
             <div class="form-group">
               <label for="address">Address:</label>
-              <input type="text" class="form-control" id="addaddress" name="address" placeholder="Address" required>
+              <input type="text" class="form-control" id="addaddress" name="address" readonly>
             </div>
             <div class="form-group">
               <label for="contactnumber">Contact Number:</label>
@@ -250,7 +252,10 @@
       });
 
       function fetchseniorcitizens() {
-        fetch('../REST/fetch-senior-staff', {
+
+        const brgy = Cookies.get('brgy');
+
+        fetch(`../REST/fetch-senior-staff?brgy=${encodeURIComponent(brgy)}`, {
           method: 'GET'
         })
           .then(response => {
@@ -456,7 +461,18 @@
         });
       });
 
+      $('#addModal').on('shown.bs.modal', function () {
+        const brgy = Cookies.get('brgy');
+        if (brgy) {
+          $('#addaddress').val(brgy);
+        } else {
+          console.error('Brgy cookie not found');
+        }
+      });
+
       $('#addSave').click(function () {
+
+
         var isValid = true;
 
         // Check all required fields
@@ -612,44 +628,32 @@
         return age;
       }
     });
-
+    // Function to retrieve cookie value by name
+    function getCookie(name) {
+      return Cookies.get(name);
+    }
+    // Function to check user type from cookies
     function checkUsertype() {
-      $.ajax({
-        url: '../REST/check-usertype',
-        method: 'GET',
-        dataType: 'json',
-        success: function (response) {
-          if (response.usertype === 'staff') {
-            // Usertype is valid, you can add further logic here if needed
-            console.log('Usertype:', response.usertype);
-          } else {
-            // Invalid usertype or status not success
-            Swal.fire({
-              title: "Unauthorized",
-              text: "You are not authorized to view this page. Logging out...",
-              icon: "error",
-              timer: 3000,
-              timerProgressBar: true,
-              didClose: () => {
-                window.location.href = '../REST/logout'; // Redirect to logout
-              }
-            });
+      // Get the usertype cookie
+      const usertype = getCookie('usertype');
+      const brgy = getCookie('brgy');
+
+      if (usertype === 'staff') {
+        // Usertype is valid, you can add further logic here if needed
+        console.log('Usertype:', usertype + ' ' + brgy);
+      } else {
+        // Invalid usertype or usertype not found
+        Swal.fire({
+          title: "Unauthorized",
+          text: "You are not authorized to view this page. Logging out...",
+          icon: "error",
+          timer: 3000,
+          timerProgressBar: true,
+          didClose: () => {
+            window.location.href = '../REST/logout'; // Redirect to logout
           }
-        },
-        error: function () {
-          // Handle error
-          Swal.fire({
-            title: "Error",
-            text: "Failed to verify user. Logging out...",
-            icon: "error",
-            timer: 3000,
-            timerProgressBar: true,
-            didClose: () => {
-              window.location.href = '../REST/logout'; // Redirect to logout
-            }
-          });
-        }
-      });
+        });
+      }
     }
 
     // Call the function to check usertype on page load

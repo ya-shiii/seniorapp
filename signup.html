@@ -27,12 +27,18 @@
         body {
             background: #ecf0f3;
         }
+
         .header {
-            font-size: 2.5rem; /* Increased font size */
-            font-weight: bold; /* Bold font weight */
-            color: #000000; /* Set color */
-            text-align: center; /* Center alignment */
-            margin-bottom: 30px; /* added margin-bottom */
+            font-size: 2.5rem;
+            /* Increased font size */
+            font-weight: bold;
+            /* Bold font weight */
+            color: #000000;
+            /* Set color */
+            text-align: center;
+            /* Center alignment */
+            margin-bottom: 30px;
+            /* added margin-bottom */
         }
 
         .wrapper {
@@ -60,16 +66,16 @@
                 8px 8px 15px #a7aaa7,
                 -8px -8px 15px #fff;
         }
-        
-.footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: rgb(36, 36, 36);
-    color: rgb(71, 248, 145);
-    text-align: center;
-    padding: 20px 0;
-}
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: rgb(36, 36, 36);
+            color: rgb(71, 248, 145);
+            text-align: center;
+            padding: 20px 0;
+        }
 
 
         .wrapper .name {
@@ -137,99 +143,100 @@
     </style>
 </head>
 
-      <!-- Header --></br>
-      <div class="header">Senior Citizen Management System</div>
-    <div class="wrapper">
-        <div class="text-center name">
-            <span>Sign Up</span>
-        </div>
-        <form class="p-3 mt-3" id="signupForm">
-            <div class="form-field d-flex align-items-center">
-                <span class="far fa-user"></span>
-                <input type="text" name="uname" id="uname" placeholder="Username" required>
-            </div>
-            <div class="form-field d-flex align-items-center">
-                <span class="fas fa-envelope"></span>
-                <input type="text" name="fullname" id="fullname" placeholder="Full Name" required>
-            </div>
-            <div class="form-field d-flex align-items-center">
-                <span class="fas fa-key"></span>
-                <input type="password" name="pass" id="pass" placeholder="Password" required>
-            </div>
-            <div class="form-field d-flex align-items-center">
-                <span class="fas fa-key"></span>
-                <input type="password" name="confirm_pass" id="confirm_pass" placeholder="Confirm Password" required>
-            </div>
-            <div class="form-field d-flex align-items-center" id="profilePictureContainer" hidden>
-                <img id="profilePicture" src="REST/img/defaultpicture.jpg" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%;" hidden>
-            </div>
-            <button type="submit" class="btn mt-3">Sign Up</button>
-        </form>
-        <div class="text-center fs-6">
-            <p>Already a member? <a href="login.html" id="signupLink">Login</a></p>
-        </div>
+<!-- Header --></br>
+<div class="header">Senior Citizen Management System</div>
+<div class="wrapper">
+    <div class="text-center name">
+        <span>Sign Up</span>
     </div>
+    <form class="p-3 mt-3" id="signupForm">
+        <div class="form-field d-flex align-items-center">
+            <span class="far fa-user"></span>
+            <input type="text" name="uname" id="uname" placeholder="Username" required>
+        </div>
+        <div class="form-field d-flex align-items-center">
+            <span class="fas fa-envelope"></span>
+            <input type="text" name="fullname" id="fullname" placeholder="Full Name" required>
+        </div>
+        <div class="form-field d-flex align-items-center">
+            <span class="fas fa-key"></span>
+            <input type="password" name="pass" id="pass" placeholder="Password" required>
+        </div>
+        <div class="form-field d-flex align-items-center">
+            <span class="fas fa-key"></span>
+            <input type="password" name="confirm_pass" id="confirm_pass" placeholder="Confirm Password" required>
+        </div>
+        <div class="form-field d-flex align-items-center" id="profilePictureContainer" hidden>
+            <img id="profilePicture" src="REST/img/defaultpicture.jpg" alt="Profile Picture"
+                style="width: 100px; height: 100px; border-radius: 50%;" hidden>
+        </div>
+        <button type="submit" class="btn mt-3">Sign Up</button>
+    </form>
+    <div class="text-center fs-6">
+        <p>Already a member? <a href="login.html" id="signupLink">Login</a></p>
+    </div>
+</div>
 
 
-    <script>
-        $(document).ready(function () {
-            // Signup form
-            $('#signupForm').on('submit', function (e) {
-                e.preventDefault();
-    
-                const username = $('#uname').val();
-                const fullname = $('#fullname').val();
-                const password = $('#pass').val();
-                const confirmPassword = $('#confirm_pass').val();
-    
-                // Simple client-side validation for password match
-                if (password !== confirmPassword) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Password mismatch',
-                        text: 'The passwords do not match. Please try again.'
-                    });
-                    return;
-                }
-    
-                $.ajax({
-                    url: 'REST/signup', 
-                    type: 'PUT',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ username: username, fullname: fullname, password: password }),
-    
-                    success: function (response) {
-                        if (response.status === 'fail') {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Signup failed',
-                                text: response.msg
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Signup successful',
-                                text: response.msg,
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(() => {
-                                // Redirect to login page
-                                window.location.href = 'login.html';
-                            });
-                        }
-                    },
-                    error: function (jqXHR) {
+<script>
+    $(document).ready(function () {
+        // Signup form
+        $('#signupForm').on('submit', function (e) {
+            e.preventDefault();
+
+            const username = $('#uname').val();
+            const fullname = $('#fullname').val();
+            const password = $('#pass').val();
+            const confirmPassword = $('#confirm_pass').val();
+
+            // Simple client-side validation for password match
+            if (password !== confirmPassword) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Password mismatch',
+                    text: 'The passwords do not match. Please try again.'
+                });
+                return;
+            }
+
+            $.ajax({
+                url: 'REST/signup',
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({ username: username, fullname: fullname, password: password }),
+
+                success: function (response) {
+                    if (response.status === 'fail') {
                         Swal.fire({
                             icon: 'error',
-                            title: 'An error occurred',
-                            text: 'Please try again. Status: ' + jqXHR.status + ' Response: ' + jqXHR.responseText
+                            title: 'Signup failed',
+                            text: response.msg
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Signup successful',
+                            text: response.msg,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            // Redirect to login page
+                            window.location.href = 'login.html';
                         });
                     }
-                });
+                },
+                error: function (jqXHR) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'An error occurred',
+                        text: 'Please try again. Status: ' + jqXHR.status + ' Response: ' + jqXHR.responseText
+                    });
+                }
             });
         });
-    </script>
-    
+    });
+</script>
+
 
 </body>
 
